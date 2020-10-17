@@ -7,11 +7,11 @@ import metah.model.Location;
 
 import java.util.Map;
 
-public class SolutionFinder {
+public class CVRPSolver {
     private Strategy strategy;
     private String lastResultDescription;
 
-    public SolutionFinder(Strategy strategy) {
+    public CVRPSolver(Strategy strategy) {
         this.strategy = strategy;
         this.lastResultDescription = "No solution found yet.";
     }

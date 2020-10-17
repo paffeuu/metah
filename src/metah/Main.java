@@ -1,7 +1,7 @@
 package metah;
 
 import metah.ea.Evaluator;
-import metah.ea.SolutionFinder;
+import metah.ea.CVRPSolver;
 import metah.ea.model.Genotype;
 import metah.ea.strategy.GreedyStrategy;
 import metah.ea.strategy.RandomStrategy;
@@ -20,14 +20,14 @@ public class Main {
 
 //
 //
-        SolutionFinder solutionFinder = new SolutionFinder(new RandomStrategy(10000, 1));
-        solutionFinder.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), distanceMatrix);
-        System.out.println(solutionFinder.getLastResultDescription());
+        CVRPSolver CVRPSolver = new CVRPSolver(new RandomStrategy(10000, 1));
+        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), distanceMatrix);
+        System.out.println(CVRPSolver.getLastResultDescription());
 
 
-        solutionFinder = new SolutionFinder(new GreedyStrategy());
-        solutionFinder.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), distanceMatrix);
-        System.out.println(solutionFinder.getLastResultDescription());
+        CVRPSolver = new CVRPSolver(new GreedyStrategy());
+        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), distanceMatrix);
+        System.out.println(CVRPSolver.getLastResultDescription());
 
 
 
