@@ -21,16 +21,16 @@ public class GreedyStrategy extends Strategy {
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, DistanceMatrix distanceMatrix) {
+    public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, int capacity,
+                                        DistanceMatrix distanceMatrix) {
 //        DistanceCalculator distanceCalculator = new DistanceCalculator();
         Evaluator evaluator = new Evaluator();
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
         for (int i = 1; i < locations.size() + 1; i++) {
-            Genotype genotype = findGreedySolutionStartingFrom(i, locations, 30, depotNr);
-            double distance = evaluator.evaluateGenotype(genotype, 30, distanceMatrix, locations, depotNr);
-//            double distance = distanceCalculator.sumDistance(genotype, distanceMatrix);
+            Genotype genotype = findGreedySolutionStartingFrom(i, locations, capacity, depotNr);
+            double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
             results.add(distance);
             if (distance < minimalDistance) {
                 minimalDistance = distance;

@@ -15,7 +15,8 @@ public abstract class Strategy {
         this.repetitions = repetitions;
     }
 
-    public abstract Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, DistanceMatrix distanceMatrix);
+    public abstract Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
+                                                 DistanceMatrix distanceMatrix);
 
     public String getName() {
         return name;

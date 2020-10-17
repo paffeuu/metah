@@ -44,7 +44,8 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, DistanceMatrix distanceMatrix) {
+    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
+                                        DistanceMatrix distanceMatrix) {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
