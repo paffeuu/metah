@@ -20,13 +20,13 @@ public class Main {
 
 //
 //
-        SolutionFinder solutionFinder = new SolutionFinder(new RandomStrategy(10000, 1, distanceMatrix));
-        solutionFinder.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr());
+        SolutionFinder solutionFinder = new SolutionFinder(new RandomStrategy(10000, 1));
+        solutionFinder.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), distanceMatrix);
         System.out.println(solutionFinder.getLastResultDescription());
 
 
-        solutionFinder = new SolutionFinder(new GreedyStrategy(distanceMatrix));
-        solutionFinder.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr());
+        solutionFinder = new SolutionFinder(new GreedyStrategy());
+        solutionFinder.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), distanceMatrix);
         System.out.println(solutionFinder.getLastResultDescription());
 
 

@@ -9,15 +9,13 @@ import java.util.Map;
 public abstract class Strategy {
     private final String name;
     protected final int repetitions;
-    protected final DistanceMatrix distanceMatrix;
 
-    protected Strategy(String name, int repetitions, DistanceMatrix distanceMatrix) {
+    protected Strategy(String name, int repetitions) {
         this.name = name;
         this.repetitions = repetitions;
-        this.distanceMatrix = distanceMatrix;
     }
 
-    public abstract Solution findOptimalSolution(Map<Integer, Location> places, int depotNr);
+    public abstract Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, DistanceMatrix distanceMatrix);
 
     public String getName() {
         return name;

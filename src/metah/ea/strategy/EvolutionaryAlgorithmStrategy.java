@@ -27,11 +27,11 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
 //    private ResultLogger logger;
 
-    public EvolutionaryAlgorithmStrategy(DistanceMatrix distanceMatrix, SelectionType selectionType,
+    public EvolutionaryAlgorithmStrategy(SelectionType selectionType,
                                          int populationSize, int tournamentSize, int generations,
                                          double crossoverLikelihood, double mutationLikelihood,
                                          int repetitions, String fileName) {
-        super("EA strategy(selection type: " + selectionType.name() + ")", repetitions, distanceMatrix);
+        super("EA strategy(selection type: " + selectionType.name() + ")", repetitions);
         this.genotypeGenerator = new RandomGenotypeGenerator();
 //        this.statisticsPrinter = new StatisticsPrinter();
         this.selectionType = selectionType;
@@ -44,7 +44,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr) {
+    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, DistanceMatrix distanceMatrix) {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
@@ -66,10 +66,10 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 Genotype bestGenotypeInPop = null;
                 switch (selectionType) {
                     case TOURNAMENT:
-                        population = conductTournamentSelection(population, tournamentSize);
+                        population = conductTournamentSelection(population, tournamentSize, distanceMatrix);
                         break;
                     case ROULETTE:
-                        population = conductRouletteSelection(population);
+                        population = conductRouletteSelection(population, distanceMatrix);
                 }
                 population = conductOrderedCrossover(population, crossoverLikelihood);
                 conductSwapMutation(population, mutationLikelihood);
@@ -112,7 +112,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return population;
     }
 
-    private List<Genotype> initializePopulationGreedy(Map<Integer, Location> places) {
+    private List<Genotype> initializePopulationGreedy(Map<Integer, Location> places, DistanceMatrix distanceMatrix) {
         List<Genotype> population = new ArrayList<>();
         Random random = new Random();
         List<Integer> numbers = IntStream.range(1, places.size()).boxed().collect(Collectors.toList());
@@ -143,7 +143,8 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return population;
     }
 
-    private List<Genotype> conductTournamentSelection(List<Genotype> population, int tournamentSize) {
+    private List<Genotype> conductTournamentSelection(List<Genotype> population, int tournamentSize,
+                                                      DistanceMatrix distanceMatrix) {
         List<Genotype> selectedPopulation = new ArrayList<>(population.size());
         while (selectedPopulation.size() != population.size()) {
             List<Genotype> tournament = new ArrayList<>(tournamentSize);
@@ -168,7 +169,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return selectedPopulation;
     }
 
-    private List<Genotype> conductRouletteSelection(List<Genotype> population) {
+    private List<Genotype> conductRouletteSelection(List<Genotype> population, DistanceMatrix distanceMatrix) {
         Map<Genotype, Double> distanceMap = new HashMap<>();
         DistanceCalculator distanceCalculator = new DistanceCalculator();
         double sum = 0;

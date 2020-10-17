@@ -6,9 +6,7 @@ import metah.ea.model.Solution;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
 import metah.model.Shop;
-import metah.service.DistanceCalculator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +15,13 @@ public class GreedyStrategy extends Strategy {
 //    private StatisticsPrinter statisticsPrinter;
 //    private ResultLogger logger;
 
-    public GreedyStrategy(DistanceMatrix distanceMatrix) {
-        super("Greedy strategy", 1, distanceMatrix);
+    public GreedyStrategy() {
+        super("Greedy strategy", 1);
 //        this.statisticsPrinter = new StatisticsPrinter();
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr) {
+    public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, DistanceMatrix distanceMatrix) {
 //        DistanceCalculator distanceCalculator = new DistanceCalculator();
         Evaluator evaluator = new Evaluator();
         Genotype bestGenotype = null;

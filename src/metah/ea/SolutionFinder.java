@@ -2,6 +2,7 @@ package metah.ea;
 
 import metah.ea.model.Solution;
 import metah.ea.strategy.Strategy;
+import metah.model.DistanceMatrix;
 import metah.model.Location;
 
 import java.util.Map;
@@ -15,8 +16,8 @@ public class SolutionFinder {
         this.lastResultDescription = "No solution found yet.";
     }
 
-    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr) {
-        Solution optimalSolution = strategy.findOptimalSolution(places, depotNr);
+    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, DistanceMatrix distanceMatrix) {
+        Solution optimalSolution = strategy.findOptimalSolution(places, depotNr, distanceMatrix);
         setLastResultDescription(optimalSolution);
         return optimalSolution;
     }

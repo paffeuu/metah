@@ -18,13 +18,13 @@ public class RandomStrategy extends Strategy {
 //    private StatisticsPrinter statisticsPrinter;
 //    private ResultLogger logger;
 
-    public RandomStrategy(int attempts, int repetitions, DistanceMatrix distanceMatrix) {
-        super("Random strategy", repetitions, distanceMatrix);
+    public RandomStrategy(int attempts, int repetitions) {
+        super("Random strategy", repetitions);
         this.attempts = attempts;
 //        this.statisticsPrinter = new StatisticsPrinter();
     }
 
-    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr) {
+    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, DistanceMatrix distanceMatrix) {
         RandomGenotypeGenerator randomGenotypeGenerator = new RandomGenotypeGenerator();
 //        DistanceCalculator distanceCalculator = new DistanceCalculator();
         Evaluator evaluator = new Evaluator();
