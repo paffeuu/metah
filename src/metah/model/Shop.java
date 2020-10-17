@@ -11,6 +11,10 @@ public class Shop extends Location {
         return demand;
     }
 
+    public void setDemand(int demand) {
+        this.demand = demand;
+    }
+
     @Override
     public boolean isDepot() {
         return false;
