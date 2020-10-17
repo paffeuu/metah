@@ -1,14 +1,14 @@
 package metah.model;
 
-import java.util.List;
+import java.util.Map;
 
 public class DataSet {
     private String name;
     private int dimensions;
     private int capacity;
-    private List<Location> locations;
+    private Map<Integer, Location> locations;
 
-    public DataSet(String name, int dimensions, int capacity, List<Location> locations) {
+    public DataSet(String name, int dimensions, int capacity, Map<Integer, Location> locations) {
         this.name = name;
         this.dimensions = dimensions;
         this.capacity = capacity;
@@ -27,7 +27,7 @@ public class DataSet {
         return capacity;
     }
 
-    public List<Location> getLocations() {
+    public Map<Integer, Location> getLocations() {
         return locations;
     }
 }
