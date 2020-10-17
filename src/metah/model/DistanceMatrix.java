@@ -13,7 +13,7 @@ public class DistanceMatrix {
         DistanceCalculator distanceCalculator = new DistanceCalculator();
 
         for (int i = 0; i < places.size(); i++) {
-            for (int j = 1; j < places.size(); j++) {
+            for (int j = 0; j < places.size(); j++) {
                 if (i == j) {
                     matrix[j][i] = -1;
                     continue;
