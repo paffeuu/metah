@@ -17,7 +17,7 @@ public abstract class Strategy {
         this.distanceMatrix = distanceMatrix;
     }
 
-    public abstract Solution findOptimalSolution(Map<Integer, Location> places);
+    public abstract Solution findOptimalSolution(Map<Integer, Location> places, int depotNr);
 
     public String getName() {
         return name;

@@ -8,14 +8,14 @@ public class DistanceMatrix {
     private final double[][] matrix;
 
     public DistanceMatrix(Map<Integer, Location> places) {
-        matrix = new double[places.size()][places.size()];
+        matrix = new double[places.size()+1][places.size()+1];
 
         DistanceCalculator distanceCalculator = new DistanceCalculator();
 
-        for (int i = 0; i < places.size(); i++) {
-            for (int j = 0; j < places.size(); j++) {
+        for (int i = 1; i < places.size() + 1; i++) {
+            for (int j = 1; j < places.size() + 1; j++) {
                 if (i == j) {
-                    matrix[j][i] = -1;
+                    matrix[j][i] = 0;
                     continue;
                 }
                 matrix[j][i] = distanceCalculator.calculateDistance(places.get(j), places.get(i));

@@ -1,8 +1,8 @@
 package metah.model;
 
 public class Depot extends Location {
-    public Depot(int x, int y) {
-        super(0, x, y);
+    public Depot(int number, int x, int y) {
+        super(number, x, y);
     }
 
     @Override

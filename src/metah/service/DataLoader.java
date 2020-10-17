@@ -64,17 +64,21 @@ public class DataLoader {
                 break;
             }
         }
-        int depotX = Integer.parseInt(fileContent.get(lineNr++).trim());
-        int depotY = Integer.parseInt(fileContent.get(lineNr++).trim());
-        Depot newDepot = new Depot(depotX, depotY);
-        locationMap.put(0, newDepot);
+        int depotNr = Integer.parseInt(fileContent.get(lineNr++).trim());
+        int endOfDepots = Integer.parseInt(fileContent.get(lineNr++).trim());
+        if (endOfDepots != -1) {
+            throw new ParseException("More than one depot!");
+        }
+        Shop falseShop = (Shop) locationMap.get(depotNr);
+        Depot newDepot = new Depot(depotNr, falseShop.getX(), falseShop.getY());
+        locationMap.put(depotNr, newDepot);
 
         String eof = fileContent.get(lineNr).trim();
         if (!eof.equals("EOF")) {
             throw new ParseException("No EOF in the last line of file!");
         }
 
-        DataSet newDataSet = new DataSet(name, dimensions, capacity, locationMap);
+        DataSet newDataSet = new DataSet(name, dimensions, capacity, depotNr, locationMap);
         return newDataSet;
     }
 

@@ -9,12 +9,20 @@ import java.util.Map;
 
 public class RandomGenotypeGenerator {
 
-    public Genotype generate(Map<Integer, Location> places) {
-        ArrayList<Integer> genotypeVector = new ArrayList<>(places.size());
-        for (int i = 0; i < places.size(); i++) {
-            genotypeVector.add(i);
+    public Genotype generate(Map<Integer, Location> places, int depotNr) {
+        ArrayList<Integer> genotypeVector = new ArrayList<>((places.size() - 1) * 2);
+        for (int i = 1; i < places.size() + 1; i++) {
+            if (i != depotNr) {
+                genotypeVector.add(i);
+            }
         }
         Collections.shuffle(genotypeVector);
+        for (int i = 0; i < places.size() - 1; i++) {
+            genotypeVector.add(depotNr);
+        }
+
+        Collections.shuffle(genotypeVector);
+
         return new Genotype(genotypeVector);
     }
 }

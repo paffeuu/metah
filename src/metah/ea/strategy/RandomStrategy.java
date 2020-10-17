@@ -1,5 +1,6 @@
 package metah.ea.strategy;
 
+import metah.ea.Evaluator;
 import metah.ea.RandomGenotypeGenerator;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
@@ -23,17 +24,19 @@ public class RandomStrategy extends Strategy {
 //        this.statisticsPrinter = new StatisticsPrinter();
     }
 
-    public Solution findOptimalSolution(Map<Integer, Location> places) {
+    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr) {
         RandomGenotypeGenerator randomGenotypeGenerator = new RandomGenotypeGenerator();
-        DistanceCalculator distanceCalculator = new DistanceCalculator();
+//        DistanceCalculator distanceCalculator = new DistanceCalculator();
+        Evaluator evaluator = new Evaluator();
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
         for (int i = 0; i < repetitions; i++) {
             double bestInRep = Double.MAX_VALUE;
             for (int j = 0; j < attempts; j++) {
-                Genotype genotype = randomGenotypeGenerator.generate(places);
-                double distance = distanceCalculator.sumDistance(genotype, distanceMatrix);
+                Genotype genotype = randomGenotypeGenerator.generate(places, depotNr);
+                double distance = evaluator.evaluateGenotype(genotype, 30, distanceMatrix, places, depotNr);
+//                double distance = distanceCalculator.sumDistance(genotype, distanceMatrix);
                 if (distance < minimalDistance) {
                     minimalDistance = distance;
                     bestGenotype = genotype;

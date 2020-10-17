@@ -15,8 +15,8 @@ public class SolutionFinder {
         this.lastResultDescription = "No solution found yet.";
     }
 
-    public Solution findOptimalSolution(Map<Integer, Location> places) {
-        Solution optimalSolution = strategy.findOptimalSolution(places);
+    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr) {
+        Solution optimalSolution = strategy.findOptimalSolution(places, depotNr);
         setLastResultDescription(optimalSolution);
         return optimalSolution;
     }

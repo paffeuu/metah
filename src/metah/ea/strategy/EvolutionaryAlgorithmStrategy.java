@@ -44,7 +44,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> places) {
+    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr) {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
@@ -106,7 +106,8 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     private List<Genotype> initializePopulationRandomly(Map<Integer, Location> places) {
         List<Genotype> population = new ArrayList<>(populationSize);
         for (int i = 0; i < populationSize; i++) {
-            population.add(genotypeGenerator.generate(places));
+            //WSTAW DEPOTNR
+            population.add(genotypeGenerator.generate(places, 0));
         }
         return population;
     }

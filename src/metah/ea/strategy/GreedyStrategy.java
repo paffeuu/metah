@@ -1,9 +1,11 @@
 package metah.ea.strategy;
 
+import metah.ea.Evaluator;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
+import metah.model.Shop;
 import metah.service.DistanceCalculator;
 
 import java.io.IOException;
@@ -21,14 +23,16 @@ public class GreedyStrategy extends Strategy {
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> places) {
-        DistanceCalculator distanceCalculator = new DistanceCalculator();
+    public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr) {
+//        DistanceCalculator distanceCalculator = new DistanceCalculator();
+        Evaluator evaluator = new Evaluator();
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
-        for (int i = 1; i < places.size() + 1; i++) {
-            Genotype genotype = findGreedySolutionStartingFrom(i, places);
-            double distance = distanceCalculator.sumDistance(genotype, distanceMatrix);
+        for (int i = 1; i < locations.size() + 1; i++) {
+            Genotype genotype = findGreedySolutionStartingFrom(i, locations, 30, depotNr);
+            double distance = evaluator.evaluateGenotype(genotype, 30, distanceMatrix, locations, depotNr);
+//            double distance = distanceCalculator.sumDistance(genotype, distanceMatrix);
             results.add(distance);
             if (distance < minimalDistance) {
                 minimalDistance = distance;
@@ -39,25 +43,35 @@ public class GreedyStrategy extends Strategy {
         return new Solution(bestGenotype, minimalDistance);
     }
 
-    private Genotype findGreedySolutionStartingFrom(int startId, Map<Integer, Location> places) {
+    private Genotype findGreedySolutionStartingFrom(int startId, Map<Integer, Location> locations, int capacity,
+                                                    int depotNr) {
         List<Integer> vector = new ArrayList<>();
         int fromId = startId;
-        vector.add(fromId);
-        while(vector.size() != places.size()) {
-            double minimalDistance = Double.MAX_VALUE;
+        if (fromId != depotNr) {
+            vector.add(fromId);
+        }
+        int currCapacity = capacity;
+        while(vector.size() != locations.size() - 1) {
+            int maxDemand = Integer.MIN_VALUE;
             int nextId = -1;
-            for (int i = 1; i < places.size() + 1; i++) {
-                if (i == fromId || vector.contains(i)) {
+            for (int i = 1; i < locations.size() + 1; i++) {
+                if (i == fromId || i == depotNr || vector.contains(i)) {
                     continue;
                 }
-                double distance = distanceMatrix.getDistance(fromId, i);
-                if (distance < minimalDistance) {
-                    minimalDistance = distance;
+                int demand = ((Shop) locations.get(i)).getDemand();
+                if (demand > maxDemand && currCapacity - demand > 0) {
+                    maxDemand = demand;
                     nextId = i;
                 }
             }
-            vector.add(nextId);
-            fromId = nextId;
+            if (maxDemand > Integer.MIN_VALUE) {
+                vector.add(nextId);
+                currCapacity -= maxDemand;
+                fromId = nextId;
+            } else {
+                currCapacity = capacity;
+                fromId = depotNr;
+            }
         }
         return new Genotype(vector);
     }
