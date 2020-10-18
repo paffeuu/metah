@@ -1,0 +1,4 @@
+package metah.ea.model;
+
+public enum MutationType {
+}

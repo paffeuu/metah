@@ -28,7 +28,12 @@ public class Evaluator {
         normalizedGenotypeList.add(depotNr);
         int currCapacity = initialCapacity;
         for (int i = 0; i < genotype.size(); i++) {
-            Location location = locations.get(genotype.get(i));
+            Location location;
+            if (genotype.get(i) > locations.size()) {
+                location = locations.get(depotNr);
+            } else {
+                location = locations.get(genotype.get(i));
+            }
             if (location.isShop()) {
                 Shop shop = (Shop) location;
                 currCapacity -= shop.getDemand();
@@ -39,15 +44,16 @@ public class Evaluator {
                 normalizedGenotypeList.add(shop.getNumber());
 
             } else {
-                if (i != 0 && genotype.get(i - 1) != depotNr) {
+                if (i != 0 && genotype.get(i - 1) != depotNr && genotype.get(i - 1) <= locations.size()) {
                     currCapacity = initialCapacity;
                     normalizedGenotypeList.add(depotNr);
                 }
             }
         }
-        if (genotype.get(genotype.size() - 1) != depotNr) {
+        if (genotype.get(genotype.size() - 1) != depotNr && genotype.get(genotype.size() - 1) <= locations.size()) {
             normalizedGenotypeList.add(depotNr);
         }
+        genotype.setNormalizedVector(normalizedGenotypeList);
         return new Genotype(normalizedGenotypeList);
     }
 
