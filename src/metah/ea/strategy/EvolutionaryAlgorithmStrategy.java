@@ -12,6 +12,7 @@ import java.util.*;
 public class EvolutionaryAlgorithmStrategy extends Strategy {
 
     private RandomGenotypeGenerator genotypeGenerator;
+    private Random random;
     private Evaluator evaluator;
     private EvolutionaryAlgorithmStrategyConfiguration conf;
 //    private StatisticsPrinter statisticsPrinter;
@@ -21,8 +22,9 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
     public EvolutionaryAlgorithmStrategy(EvolutionaryAlgorithmStrategyConfiguration conf) {
         super("EA strategy(selection type: " + conf.getSelectionType().name() + ")", conf.getRepetitions());
-        this.evaluator = new Evaluator();
         this.genotypeGenerator = new RandomGenotypeGenerator();
+        this.random = new Random();
+        this.evaluator = new Evaluator();
 //        this.statisticsPrinter = new StatisticsPrinter();
         this.conf = conf;
 //        this.fileName = fileName;
@@ -156,13 +158,11 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         if (conf.getCrossoverType() == CrossoverType.OX) {
             return crossoverOrdered(population, conf.getCrossoverLikelihood());
         } else {
-            //TODO
-            return null;
+            return crossoverPartiallyMatched(population, conf.getCrossoverLikelihood());
         }
     }
 
     private List<Genotype> crossoverOrdered(List<Genotype> population, double crossoverLikelihood) {
-        Random random = new Random();
         List<Genotype> populationAfterCrossover = new ArrayList<>();
         for (int i = 0; i < population.size(); i++) {
             if (random.nextDouble() < crossoverLikelihood) {
@@ -195,6 +195,66 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
             }
         }
         return populationAfterCrossover;
+    }
+
+    private List<Genotype> crossoverPartiallyMatched(List<Genotype> population, double crossoverLikelihood) {
+        List<Genotype> populationAfterCrossover = new ArrayList<>();
+        for (int i = 0; i < population.size(); i++) {
+            if (random.nextDouble() < crossoverLikelihood) {
+                int firstIntersection = (random.nextInt(population.get(0).size()));
+                int secondIntersection;
+                do {
+                    secondIntersection = (random.nextInt(population.get(0).size()));
+                } while (firstIntersection == secondIntersection);
+                if (firstIntersection > secondIntersection) {
+                    int temp = secondIntersection;
+                    secondIntersection = firstIntersection;
+                    firstIntersection = temp;
+                }
+                Genotype firstParent = population.get(i);
+                Genotype secondParent = population.get((i + 1) % population.size());
+
+                List<Integer> placesToRelocate = new ArrayList<>();
+                for (int j = firstIntersection; j <= secondIntersection; j++) {
+                    placesToRelocate.add(firstParent.get(j));
+                }
+                List<Integer> childVector = new ArrayList<>();
+                for (int j = 0; j < firstParent.size(); j++) {
+                    if (j < firstIntersection || j > secondIntersection) {
+                        childVector.add(-1);
+                    } else {
+                        int placesToRelocateNumber = j - firstIntersection;
+                        childVector.add(placesToRelocate.get(placesToRelocateNumber));
+                    }
+                }
+                for (int j = firstIntersection; j <= secondIntersection; j++) {
+                    int index = j;
+                    int initialValue = secondParent.get(index);
+                    boolean valueAssigned = false;
+                    while (!valueAssigned && !childVector.contains(initialValue)) {
+                        int currValue = firstParent.get(index);
+                        int currIndex = secondParent.getVector().indexOf(currValue);
+                        if (currIndex < firstIntersection || currIndex > secondIntersection) {
+                            childVector.set(currIndex, initialValue);
+                            valueAssigned = true;
+                        } else {
+                            index = currIndex;
+                        }
+                    }
+                }
+                for (int j = 0; j < childVector.size(); j++) {
+                    if (childVector.get(j) == -1) {
+                        childVector.set(j, secondParent.get(j));
+                    }
+                }
+                Genotype child = new Genotype(childVector);
+                populationAfterCrossover.add(child);
+            } else {
+                populationAfterCrossover.add(population.get(i));
+            }
+        }
+        return populationAfterCrossover;
+
     }
 
     private List<Genotype> mutation(List<Genotype> population, EvolutionaryAlgorithmStrategyConfiguration conf) {
