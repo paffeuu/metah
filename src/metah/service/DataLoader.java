@@ -8,6 +8,8 @@ import metah.model.Shop;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class DataLoader {
@@ -18,16 +20,16 @@ public class DataLoader {
     }
 
     private List<String> loadFileContent(String fileName) {
-        String fullFileName = "data/" + fileName + ".vrp";
+        String fullFileName = fileName + ".vrp";
         List<String> lines = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File(fullFileName))) {
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fullFileName);
+        try (Scanner scanner = new Scanner(is)) {
             String line = null;
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
                 lines.add(line);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         return lines;
     }

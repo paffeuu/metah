@@ -26,24 +26,55 @@ public class Main {
 
 //
         CVRPSolver CVRPSolver;
-        CVRPSolver = new CVRPSolver(new RandomStrategy(new RandomStrategyConfiguration(1000000, 1)));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
-                distanceMatrix, instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-//
-//
-        CVRPSolver = new CVRPSolver(new GreedyStrategy());
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
-                distanceMatrix, instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+//        CVRPSolver = new CVRPSolver(new RandomStrategy(new RandomStrategyConfiguration(1000000, 1)));
+//        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+//                distanceMatrix, instanceName);
+//        System.out.println(CVRPSolver.getLastResultDescription());
+////
+////
+//        CVRPSolver = new CVRPSolver(new GreedyStrategy());
+//        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+//                distanceMatrix, instanceName);
+//        System.out.println(CVRPSolver.getLastResultDescription());
 
         CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 100,
-                5, 100, 0.7, 0.1, 2
+                SelectionType.ROULETTE, CrossoverType.PMX, MutationType.INVERSION, 100,
+                15, 100, 0.7, 0.1, 5
         )));
         CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
                 instanceName);
         System.out.println(CVRPSolver.getLastResultDescription());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

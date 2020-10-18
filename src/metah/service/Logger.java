@@ -38,6 +38,8 @@ public class Logger {
     }
 
     public void writeToFile() {
+        File dir = new File("log");
+        dir.mkdir();
         File file = new File(getFileName());
         try (FileWriter fw = new FileWriter(file)) {
             for (String line : content) {
