@@ -17,8 +17,9 @@ public class CVRPSolver {
     }
 
     public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
-                                        DistanceMatrix distanceMatrix) {
-        Solution optimalSolution = strategy.findOptimalSolution(places, depotNr, capacity, distanceMatrix);
+                                        DistanceMatrix distanceMatrix, String instanceName) {
+        Solution optimalSolution = strategy.findOptimalSolution(places, depotNr, capacity, distanceMatrix,
+                instanceName);
         setLastResultDescription(optimalSolution);
         return optimalSolution;
     }

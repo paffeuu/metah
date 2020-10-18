@@ -16,20 +16,13 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     private Random random;
     private Evaluator evaluator;
     private EvolutionaryAlgorithmStrategyConfiguration conf;
-//    private StatisticsPrinter statisticsPrinter;
-//    private String fileName;
-
-//    private ResultLogger logger;
 
     public EvolutionaryAlgorithmStrategy(EvolutionaryAlgorithmStrategyConfiguration conf) {
         super(EvolutionaryAlgorithmStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions());
-        Logger.getLogger(getName());
         this.genotypeGenerator = new RandomGenotypeGenerator();
         this.random = new Random();
         this.evaluator = new Evaluator();
-//        this.statisticsPrinter = new StatisticsPrinter();
         this.conf = conf;
-//        this.fileName = fileName;
     }
 
     @Override
@@ -38,7 +31,6 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
-//        List<Double> results = new ArrayList<>();
         for (int j = 0; j < repetitions; j++) {
             List<Genotype> population = initializePopulationRandomly(locations, depotNr);
             for (int i = 0; i < conf.getGenerations(); i++) {
@@ -51,12 +43,9 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 minimalDistance = evaluationResults.getMinimalDistance();
 
             }
-            Logger logger = getLogger();
-            logger.writeToFile();
         }
-//        statisticsPrinter.printStatistics(results, repetitions);
-
-
+        logBestGenotype(bestGenotype, minimalDistance);
+        getLogger().writeToFile();
         return new Solution(bestGenotype, minimalDistance);
     }
 
@@ -357,8 +346,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
     private static String resolveNameFromConfiguration(EvolutionaryAlgorithmStrategyConfiguration conf) {
         StringBuilder sb = new StringBuilder();
-        sb.append(System.currentTimeMillis());
-        sb.append("_EA");
+        sb.append("EA");
         sb.append("_pop-");
         sb.append(conf.getPopulationSize());
         sb.append("_gen-");
@@ -403,10 +391,6 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
         Logger logger = getLogger();
         logger.log(logStr);
-    }
-
-    private Logger getLogger() {
-        return Logger.getLogger(getName());
     }
 
 }

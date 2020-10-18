@@ -7,28 +7,23 @@ import metah.ea.model.Solution;
 import metah.ea.strategy.configuration.RandomStrategyConfiguration;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
-import metah.service.DistanceCalculator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class RandomStrategy extends Strategy {
     private RandomStrategyConfiguration conf;
-//    private StatisticsPrinter statisticsPrinter;
-//    private ResultLogger logger;
 
     public RandomStrategy(RandomStrategyConfiguration conf) {
-        super("Random strategy", conf.getRepetitions());
+        super("Rand_attmpts-" + conf.getAttempts() + "_rep-" + conf.getRepetitions(),
+                conf.getRepetitions());
         this.conf = conf;
-//        this.statisticsPrinter = new StatisticsPrinter();
     }
 
     public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
                                         DistanceMatrix distanceMatrix) {
         RandomGenotypeGenerator randomGenotypeGenerator = new RandomGenotypeGenerator();
-//        DistanceCalculator distanceCalculator = new DistanceCalculator();
         Evaluator evaluator = new Evaluator();
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
@@ -38,7 +33,6 @@ public class RandomStrategy extends Strategy {
             for (int j = 0; j < conf.getAttempts(); j++) {
                 Genotype genotype = randomGenotypeGenerator.generate(places, depotNr);
                 double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, places, depotNr);
-//                double distance = distanceCalculator.sumDistance(genotype, distanceMatrix);
                 if (distance < minimalDistance) {
                     minimalDistance = distance;
                     bestGenotype = genotype;
@@ -50,29 +44,8 @@ public class RandomStrategy extends Strategy {
             System.out.println(bestInRep);
             results.add(bestInRep);
         }
-//        statisticsPrinter.printStatistics(results, repetitions);
-
+        logBestGenotype(bestGenotype, minimalDistance);
+        getLogger().writeToFile();
         return new Solution(bestGenotype, minimalDistance);
-    }
-
-    private void getNewLogFile(String params) {
-//        try {
-//            this.logger = ResultLogger.getResultLogger(params);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
-    private void logResult(int i, double best, double worst, double avg) {
-//        if (logger != null) {
-//            try {
-//                logger.saveToLog(i, best, worst, avg);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-    }
-
-    public void setConfiguration(RandomStrategyConfiguration conf) {
-        this.conf = conf;
     }
 }

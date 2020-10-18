@@ -25,6 +25,7 @@ public class Logger {
     }
 
     private final String name;
+    private String instanceName;
     private final List<String> content;
 
     private Logger(String name) {
@@ -37,7 +38,7 @@ public class Logger {
     }
 
     public void writeToFile() {
-        File file = new File("log\\" + name + ".log");
+        File file = new File(getFileName());
         try (FileWriter fw = new FileWriter(file)) {
             for (String line : content) {
                 fw.write(line);
@@ -46,5 +47,28 @@ public class Logger {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getFileName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("log\\");
+        sb.append(getTimeStamp());
+        sb.append("_");
+        sb.append(instanceName);
+        sb.append("_");
+        sb.append(name);
+        sb.append(".log");
+        return sb.toString();
+    }
+
+    private int getTimeStamp() {
+        long currTimeMilis = System.currentTimeMillis();
+        long currTimeSeconds = currTimeMilis / 1000L;
+        long currTimeSecondInThisYear = currTimeSeconds % (60 * 60 * 24 * 365);
+        return (int) currTimeSecondInThisYear;
+    }
+
+    public void setInstanceName(String instanceName) {
+        this.instanceName = instanceName;
     }
 }

@@ -12,18 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 public class GreedyStrategy extends Strategy {
-//    private StatisticsPrinter statisticsPrinter;
-//    private ResultLogger logger;
 
     public GreedyStrategy() {
-        super("Greedy strategy", 1);
-//        this.statisticsPrinter = new StatisticsPrinter();
+        super("Greedy", 1);
     }
 
     @Override
     public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, int capacity,
                                         DistanceMatrix distanceMatrix) {
-//        DistanceCalculator distanceCalculator = new DistanceCalculator();
         Evaluator evaluator = new Evaluator();
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
@@ -37,7 +33,8 @@ public class GreedyStrategy extends Strategy {
                 bestGenotype = genotype;
             }
         }
-//        statisticsPrinter.printStatistics(results, places.size());
+        logBestGenotype(bestGenotype, minimalDistance);
+        getLogger().writeToFile();
         return new Solution(bestGenotype, minimalDistance);
     }
 
@@ -74,11 +71,5 @@ public class GreedyStrategy extends Strategy {
         return new Genotype(vector);
     }
 
-    private void getNewLogFile(String params) {
-//        try {
-//            this.logger = ResultLogger.getResultLogger(params);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
+
 }

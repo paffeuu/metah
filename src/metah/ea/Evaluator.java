@@ -14,9 +14,7 @@ public class Evaluator {
 
     public double evaluateGenotype(Genotype genotype, int initialCapacity, DistanceMatrix distanceMatrix,
                                    Map<Integer, Location> locations, int depotNr) {
-//        System.out.print("initial genotype: " + genotype + "\t\t\t\t\t");
         Genotype normalizedGenotype = normalizeGenotype(genotype, initialCapacity, distanceMatrix, locations, depotNr);
-//        System.out.println("normalized genotype: " + normalizedGenotype);
         DistanceCalculator calculator = new DistanceCalculator();
         double distance = calculator.sumDistance(normalizedGenotype, distanceMatrix);
         return distance;

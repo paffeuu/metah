@@ -16,9 +16,6 @@ public class DistanceCalculator {
         for (int i = 0; i < genotype.size() - 1; i++) {
             sum += distanceMatrix.getDistance(genotype.get(i),genotype.get(i+1));
         }
-//        if (genotype.size() != 0) {
-//            sum += distanceMatrix.getDistance(genotype.get(genotype.size() - 1), genotype.get(0));
-//        }
         return sum;
     }
 }

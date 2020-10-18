@@ -15,34 +15,34 @@ import metah.model.DataSet;
 import metah.model.DistanceMatrix;
 import metah.service.DataLoader;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
+//        String instanceName = "toy";
+        String instanceName = "A-n32-k5";
+
         DataLoader dataLoader = new DataLoader();
-        DataSet dataSet = dataLoader.loadDataSetFromFile("toy");
-//        DataSet dataSet = dataLoader.loadDataSetFromFile("A-n32-k5");
+        DataSet dataSet = dataLoader.loadDataSetFromFile(instanceName);
         DistanceMatrix distanceMatrix = new DistanceMatrix(dataSet.getLocations());
 
 //
         CVRPSolver CVRPSolver;
-//        CVRPSolver = new CVRPSolver(new RandomStrategy(new RandomStrategyConfiguration(1000000, 1)));
-//        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
-//                distanceMatrix);
-//        System.out.println(CVRPSolver.getLastResultDescription());
-////
-////
-//        CVRPSolver = new CVRPSolver(new GreedyStrategy());
-//        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
-//                distanceMatrix);
-//        System.out.println(CVRPSolver.getLastResultDescription());
+        CVRPSolver = new CVRPSolver(new RandomStrategy(new RandomStrategyConfiguration(1000000, 1)));
+        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                distanceMatrix, instanceName);
+        System.out.println(CVRPSolver.getLastResultDescription());
+//
+//
+        CVRPSolver = new CVRPSolver(new GreedyStrategy());
+        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                distanceMatrix, instanceName);
+        System.out.println(CVRPSolver.getLastResultDescription());
 
         CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
                 SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 100,
-                5, 100, 0.7, 0.1, 1
+                5, 100, 0.7, 0.1, 2
         )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix);
+        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                instanceName);
         System.out.println(CVRPSolver.getLastResultDescription());
 
 
