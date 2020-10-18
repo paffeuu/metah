@@ -39,7 +39,7 @@ public class Main {
 //        System.out.println(CVRPSolver.getLastResultDescription());
 
         CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.SWAP, 100,
+                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 100,
                 5, 100, 0.7, 0.1, 1
         )));
         CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix);

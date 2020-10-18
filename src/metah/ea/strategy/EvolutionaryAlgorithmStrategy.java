@@ -261,13 +261,11 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         if (conf.getMutationType() == MutationType.SWAP) {
             return mutationSwap(population, conf.getMutationLikelihood());
         } else {
-            //TODO
-            return null;
+            return mutationInversion(population, conf.getMutationLikelihood());
         }
     }
 
     private List<Genotype> mutationSwap(List<Genotype> population, double mutationLikelihood) {
-        Random random = new Random();
         List<Genotype> mutatedPopulation = new ArrayList<>();
         for (Genotype genotype : population) {
             genotype = new Genotype(genotype);
@@ -284,6 +282,44 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 genotype.getVector().add(firstPlace, secondValue);
                 genotype.getVector().remove(secondPlace);
                 genotype.getVector().add(secondPlace, firstValue);
+            }
+        }
+        return mutatedPopulation;
+    }
+
+    private List<Genotype> mutationInversion(List<Genotype> population, double mutationLikelihood) {
+        List<Genotype> mutatedPopulation = new ArrayList<>();
+        for (Genotype genotype : population) {
+            if (random.nextDouble() < mutationLikelihood) {
+                int firstIntersection = (random.nextInt(population.get(0).size()));
+                int secondIntersection;
+                do {
+                    secondIntersection = (random.nextInt(population.get(0).size()));
+                } while (firstIntersection == secondIntersection);
+                if (firstIntersection > secondIntersection) {
+                    int temp = secondIntersection;
+                    secondIntersection = firstIntersection;
+                    firstIntersection = temp;
+                }
+
+                List<Integer> placesToRelocate = new ArrayList<>();
+                for (int j = firstIntersection; j <= secondIntersection; j++) {
+                    placesToRelocate.add(genotype.get(j));
+                }
+                Collections.reverse(placesToRelocate);
+
+                List<Integer> mutatedVector = new ArrayList<>();
+                for (int j = 0; j < genotype.size(); j++) {
+                    if (j >= firstIntersection && j <= secondIntersection) {
+                        mutatedVector.add(placesToRelocate.get(j - firstIntersection));
+                    } else {
+                        mutatedVector.add(genotype.get(j));
+                    }
+                }
+                Genotype mutatedGenotype = new Genotype(mutatedVector);
+                mutatedPopulation.add(mutatedGenotype);
+            } else {
+                mutatedPopulation.add(genotype);
             }
         }
         return mutatedPopulation;
