@@ -53,7 +53,7 @@ public class Logger {
 
     private String getFileName() {
         StringBuilder sb = new StringBuilder();
-        sb.append("log\\");
+        sb.append("log/");
         sb.append(getTimeStamp());
         sb.append("_");
         sb.append(instanceName);
