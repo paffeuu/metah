@@ -33,7 +33,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                                         DistanceMatrix distanceMatrix) {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
-        List<Double> results = new ArrayList<>();
+//        List<Double> results = new ArrayList<>();
         for (int j = 0; j < repetitions; j++) {
 //            getNewLogFile(
 //                    "EA_" + fileName +
@@ -46,34 +46,14 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 //                    "_" + j);
             List<Genotype> population = initializePopulationRandomly(locations, depotNr);
             for (int i = 0; i < conf.getGenerations(); i++) {
-                double bestInPop = Double.MAX_VALUE;
-                double worstInPop = Double.MIN_VALUE;
-                double sumInPop = 0;
-                Genotype bestGenotypeInPop = null;
                 population = selection(population, conf, locations, depotNr, capacity, distanceMatrix);
                 population = crossover(population, conf);
                 population = mutation(population, conf);
-                for (Genotype genotype : population) {
-                    double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
-                    if (distance < bestInPop) {
-                        bestInPop = distance;
-                        bestGenotypeInPop = genotype;
-                    }
-                    if (distance > worstInPop) {
-                        worstInPop = distance;
-                    }
-                    sumInPop += distance;
-                }
-                double avgOfPop = sumInPop / conf.getPopulationSize();
-                logResult(i, bestInPop, worstInPop, avgOfPop);
-                if (bestInPop < minimalDistance) {
-                    minimalDistance = bestInPop;
-                    bestGenotype = bestGenotypeInPop;
-                }
-                if (i+1 == conf.getGenerations()) {
-                    System.out.println(bestInPop);
-                    results.add(bestInPop);
-                }
+                EvaluationResults evaluationResults = evaluation(population, capacity, distanceMatrix, locations, depotNr,
+                        minimalDistance, bestGenotype);
+                bestGenotype = evaluationResults.getBestGenotype();
+                minimalDistance = evaluationResults.getMinimalDistance();
+
             }
         }
 //        statisticsPrinter.printStatistics(results, repetitions);
@@ -236,7 +216,39 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         }
         return population;
     }
-    
+
+    private EvaluationResults evaluation(List<Genotype> population, int capacity, DistanceMatrix distanceMatrix,
+                                         Map<Integer, Location> locations, int depotNr, double minimalDistance,
+                                         Genotype bestGenotype
+                                         ) {
+        double bestInPop = Double.MAX_VALUE;
+        double worstInPop = Double.MIN_VALUE;
+        double sumInPop = 0;
+        Genotype bestGenotypeInPop = null;
+        for (Genotype genotype : population) {
+            double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
+            if (distance < bestInPop) {
+                bestInPop = distance;
+                bestGenotypeInPop = genotype;
+            }
+            if (distance > worstInPop) {
+                worstInPop = distance;
+            }
+            sumInPop += distance;
+        }
+        double avgOfPop = sumInPop / conf.getPopulationSize();
+//        logResult(i, bestInPop, worstInPop, avgOfPop);
+        if (bestInPop < minimalDistance) {
+            minimalDistance = bestInPop;
+            bestGenotype = bestGenotypeInPop;
+        }
+//        if (i+1 == conf.getGenerations()) {
+//            System.out.println(bestInPop);
+//            results.add(bestInPop);
+//        }
+        return new EvaluationResults(minimalDistance, bestGenotype);
+    }
+
     private void getNewLogFile(String params) {
 //        try {
 //            this.logger = ResultLogger.getResultLogger(params);
