@@ -31,10 +31,7 @@ public class CVRPSolver {
         StringBuilder sb = new StringBuilder();
         sb.append("Using strategy: ");
         sb.append(strategy.getName());
-        sb.append(" (");
-        sb.append(strategy.getRepetitions());
-        sb.append(" repetitions)\n");
-        sb.append("Best found solution:\n");
+        sb.append("\nBest found solution:\n");
         sb.append(optimalSolution);
         lastResultDescription = sb.toString();
     }

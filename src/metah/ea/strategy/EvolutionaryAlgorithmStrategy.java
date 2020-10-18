@@ -6,6 +6,7 @@ import metah.ea.model.*;
 import metah.ea.strategy.configuration.EvolutionaryAlgorithmStrategyConfiguration;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
+import metah.service.Logger;
 
 import java.util.*;
 
@@ -21,7 +22,8 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 //    private ResultLogger logger;
 
     public EvolutionaryAlgorithmStrategy(EvolutionaryAlgorithmStrategyConfiguration conf) {
-        super("EA strategy(selection type: " + conf.getSelectionType().name() + ")", conf.getRepetitions());
+        super(EvolutionaryAlgorithmStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions());
+        Logger.getLogger(getName());
         this.genotypeGenerator = new RandomGenotypeGenerator();
         this.random = new Random();
         this.evaluator = new Evaluator();
@@ -33,30 +35,24 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     @Override
     public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, int capacity,
                                         DistanceMatrix distanceMatrix) {
+
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
 //        List<Double> results = new ArrayList<>();
         for (int j = 0; j < repetitions; j++) {
-//            getNewLogFile(
-//                    "EA_" + fileName +
-//                    "_pop=" + populationSize +
-//                    "_sel=" + selectionType.name() +
-//                    "_tour=" + tournamentSize +
-//                    "_gen=" + generations +
-//                    "_Px=" + crossoverLikelihood +
-//                    "_Pm=" + mutationLikelihood +
-//                    "_" + j);
             List<Genotype> population = initializePopulationRandomly(locations, depotNr);
             for (int i = 0; i < conf.getGenerations(); i++) {
                 population = selection(population, conf, locations, depotNr, capacity, distanceMatrix);
                 population = crossover(population, conf);
                 population = mutation(population, conf);
                 EvaluationResults evaluationResults = evaluation(population, capacity, distanceMatrix, locations, depotNr,
-                        minimalDistance, bestGenotype);
+                        minimalDistance, bestGenotype, i);
                 bestGenotype = evaluationResults.getBestGenotype();
                 minimalDistance = evaluationResults.getMinimalDistance();
 
             }
+            Logger logger = getLogger();
+            logger.writeToFile();
         }
 //        statisticsPrinter.printStatistics(results, repetitions);
 
@@ -327,7 +323,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
     private EvaluationResults evaluation(List<Genotype> population, int capacity, DistanceMatrix distanceMatrix,
                                          Map<Integer, Location> locations, int depotNr, double minimalDistance,
-                                         Genotype bestGenotype
+                                         Genotype bestGenotype, int genNumber
                                          ) {
         double bestInPop = Double.MAX_VALUE;
         double worstInPop = Double.MIN_VALUE;
@@ -345,7 +341,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
             sumInPop += distance;
         }
         double avgOfPop = sumInPop / conf.getPopulationSize();
-//        logResult(i, bestInPop, worstInPop, avgOfPop);
+        logResult(genNumber, bestInPop, worstInPop, avgOfPop);
         if (bestInPop < minimalDistance) {
             minimalDistance = bestInPop;
             bestGenotype = bestGenotypeInPop;
@@ -357,22 +353,60 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return new EvaluationResults(minimalDistance, bestGenotype);
     }
 
-    private void getNewLogFile(String params) {
-//        try {
-//            this.logger = ResultLogger.getResultLogger(params);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
+
+    private static String resolveNameFromConfiguration(EvolutionaryAlgorithmStrategyConfiguration conf) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(System.currentTimeMillis());
+        sb.append("_EA");
+        sb.append("_pop-");
+        sb.append(conf.getPopulationSize());
+        sb.append("_gen-");
+        sb.append(conf.getGenerations());
+        sb.append("_sel-");
+        if (conf.getSelectionType() == SelectionType.TOURNAMENT) {
+            sb.append("TOUR-");
+            sb.append(conf.getTournamentSize());
+        } else {
+            sb.append("ROUL");
+        }
+        sb.append("_mut-");
+        if (conf.getMutationType() == MutationType.SWAP) {
+            sb.append("SWAP-");
+        } else {
+            sb.append("INV-");
+        }
+        sb.append(conf.getMutationLikelihood());
+        sb.append("_cross-");
+        sb.append(conf.getCrossoverType());
+        sb.append("-");
+        sb.append(conf.getCrossoverLikelihood());
+        sb.append("_rep-");
+        sb.append(conf.getRepetitions());
+        return sb.toString();
     }
 
+
+
     private void logResult(int i, double best, double worst, double avg) {
-//        if (logger != null) {
-//            try {
-//                logger.saveToLog(i, best, worst, avg);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        String bestStr = String.format("%.0f", best);
+        StringBuilder sb = new StringBuilder();
+        sb.append(i+1);
+        sb.append(",");
+        sb.append(bestStr);
+        sb.append(",");
+        sb.append(String.format("%.0f", worst));
+        sb.append(",");
+        sb.append(String.format("%.0f", avg));
+        sb.append("\n");
+        String logStr = sb.toString();
+
+        Logger logger = getLogger();
+        logger.log(logStr);
+    }
+
+    private Logger getLogger() {
+        return Logger.getLogger(getName());
     }
 
 }
