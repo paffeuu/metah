@@ -118,10 +118,19 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
             sum += distance;
         }
         Map<Genotype, Double> likelihoodMap = new HashMap<>();
+        double reversedLikelihoodSum = 0;
         for (Genotype genotype : population) {
             double distance = distanceMap.get(genotype);
             double likelihood = distance / sum;
+            double reversedLikelihood = 1 / likelihood;
+            reversedLikelihoodSum += reversedLikelihood;
+            likelihoodMap.put(genotype, reversedLikelihood);
             likelihoodMap.put(genotype, likelihood);
+        }
+        for (Genotype genotype : population) {
+            double reversedLikelihood = likelihoodMap.get(genotype);
+            double reversedLikelihoodNormalized = reversedLikelihood / reversedLikelihoodSum;
+            likelihoodMap.put(genotype, reversedLikelihoodNormalized);
         }
         List<Double> limitList = new ArrayList<>();
         double limit = 0;
@@ -199,7 +208,10 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
     private List<Genotype> mutationSwap(List<Genotype> population, double mutationLikelihood) {
         Random random = new Random();
+        List<Genotype> mutatedPopulation = new ArrayList<>();
         for (Genotype genotype : population) {
+            genotype = new Genotype(genotype);
+            mutatedPopulation.add(genotype);
             if (random.nextDouble() < mutationLikelihood) {
                 int firstPlace = (random.nextInt(genotype.size()));
                 int secondPlace;
@@ -214,7 +226,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 genotype.getVector().add(secondPlace, firstValue);
             }
         }
-        return population;
+        return mutatedPopulation;
     }
 
     private EvaluationResults evaluation(List<Genotype> population, int capacity, DistanceMatrix distanceMatrix,
