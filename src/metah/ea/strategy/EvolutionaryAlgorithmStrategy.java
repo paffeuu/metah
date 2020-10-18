@@ -108,11 +108,10 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         double reversedLikelihoodSum = 0;
         for (Genotype genotype : population) {
             double distance = distanceMap.get(genotype);
-            double likelihood = distance / sum;
+            double likelihood = Math.pow(distance / sum, 10);
             double reversedLikelihood = 1 / likelihood;
             reversedLikelihoodSum += reversedLikelihood;
             likelihoodMap.put(genotype, reversedLikelihood);
-            likelihoodMap.put(genotype, likelihood);
         }
         for (Genotype genotype : population) {
             double reversedLikelihood = likelihoodMap.get(genotype);
