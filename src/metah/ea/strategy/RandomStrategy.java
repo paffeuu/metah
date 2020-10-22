@@ -33,6 +33,7 @@ public class RandomStrategy extends Strategy {
             for (int j = 0; j < conf.getAttempts(); j++) {
                 Genotype genotype = randomGenotypeGenerator.generate(places, depotNr);
                 double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, places, depotNr);
+                getLogger().log(j + "," + distance + "\n");
                 if (distance < minimalDistance) {
                     minimalDistance = distance;
                     bestGenotype = genotype;
