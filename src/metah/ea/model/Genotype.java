@@ -23,6 +23,12 @@ public class Genotype {
         return vector.size();
     }
 
+    public void swapTwoGenes(int a, int b) {
+        int tempValue = vector.get(a);
+        vector.set(a, vector.get(b));
+        vector.set(b, tempValue);
+    }
+
     public List<Integer> getVector() {
         return vector;
     }

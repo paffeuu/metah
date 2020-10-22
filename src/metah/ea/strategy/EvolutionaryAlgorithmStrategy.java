@@ -260,12 +260,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 do {
                     secondPlace = (random.nextInt(genotype.size()));
                 } while (firstPlace == secondPlace);
-                int firstValue = genotype.getVector().get(firstPlace);
-                int secondValue = genotype.getVector().get(secondPlace);
-                genotype.getVector().remove(firstPlace);
-                genotype.getVector().add(firstPlace, secondValue);
-                genotype.getVector().remove(secondPlace);
-                genotype.getVector().add(secondPlace, firstValue);
+                genotype.swapTwoGenes(firstPlace, secondPlace);
             }
         }
         return mutatedPopulation;
