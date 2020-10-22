@@ -128,9 +128,9 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         List<Genotype> selectionPopulation = new ArrayList<>();
         for (int i = 0; i < population.size(); i++) {
             double randomNr = Math.random();
-            for (int j = 0; j < limitList.size(); j++) {
+            for (int j = 0; j < population.size(); j++) {
                 if (randomNr < limitList.get(j)) {
-                    selectionPopulation.add(population.get(j));
+                    selectionPopulation.add(new Genotype(population.get(j)));
                     break;
                 }
             }
