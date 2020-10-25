@@ -37,6 +37,25 @@ public class Logger {
         this.content.add(newContent);
     }
 
+    public void logStatistics(StatisticsService statisticsService) {
+        int best = statisticsService.getBest();
+        int worst = statisticsService.getWorst();
+        int avg = statisticsService.getAvg();
+        int std = statisticsService.getStd();
+        StringBuilder sb = new StringBuilder();
+        sb.append("best = ");
+        sb.append(best);
+        sb.append("; worst = ");
+        sb.append(worst);
+        sb.append("; avg = ");
+        sb.append(avg);
+        sb.append("; std = ");
+        sb.append(std);
+        String statistics = sb.toString();
+        log(statistics);
+        System.out.println(statistics);
+    }
+
     public void writeToFile() {
         File dir = new File("log");
         dir.mkdir();

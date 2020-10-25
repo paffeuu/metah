@@ -40,6 +40,6 @@ public abstract class Strategy {
     }
 
     protected void logBestGenotype(Genotype bestGenotype, double minimalDistance) {
-        getLogger().log(bestGenotype + " - " + (int) minimalDistance);
+        getLogger().log(bestGenotype + " - " + (int) minimalDistance + "\n");
     }
 }

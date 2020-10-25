@@ -7,6 +7,7 @@ import metah.ea.model.Solution;
 import metah.ea.strategy.configuration.RandomStrategyConfiguration;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
+import metah.service.StatisticsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class RandomStrategy extends Strategy {
                                         DistanceMatrix distanceMatrix) {
         RandomGenotypeGenerator randomGenotypeGenerator = new RandomGenotypeGenerator();
         Evaluator evaluator = new Evaluator();
+        StatisticsService statistics = new StatisticsService(conf.getRepetitions() * conf.getAttempts());
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
@@ -33,7 +35,7 @@ public class RandomStrategy extends Strategy {
             for (int j = 0; j < conf.getAttempts(); j++) {
                 Genotype genotype = randomGenotypeGenerator.generate(places, depotNr);
                 double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, places, depotNr);
-                getLogger().log(j + "," + distance + "\n");
+                statistics.addResult((int) distance);
                 if (distance < minimalDistance) {
                     minimalDistance = distance;
                     bestGenotype = genotype;
@@ -42,10 +44,10 @@ public class RandomStrategy extends Strategy {
                     bestInRep = distance;
                 }
             }
-            System.out.println(bestInRep);
             results.add(bestInRep);
         }
         logBestGenotype(bestGenotype, minimalDistance);
+        getLogger().logStatistics(statistics);
         getLogger().writeToFile();
         return new Solution(bestGenotype, minimalDistance);
     }

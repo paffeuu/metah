@@ -6,6 +6,7 @@ import metah.ea.model.Solution;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
 import metah.model.Shop;
+import metah.service.StatisticsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,14 @@ public class GreedyStrategy extends Strategy {
     public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, int capacity,
                                         DistanceMatrix distanceMatrix) {
         Evaluator evaluator = new Evaluator();
+        StatisticsService statistics = new StatisticsService(locations.size());
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         List<Double> results = new ArrayList<>();
         for (int i = 1; i < locations.size() + 1; i++) {
             Genotype genotype = findGreedySolutionStartingFrom(i, locations, capacity, depotNr);
             double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
+            statistics.addResult((int) distance);
             results.add(distance);
             if (distance < minimalDistance) {
                 minimalDistance = distance;
@@ -34,6 +37,7 @@ public class GreedyStrategy extends Strategy {
             }
         }
         logBestGenotype(bestGenotype, minimalDistance);
+        getLogger().logStatistics(statistics);
         getLogger().writeToFile();
         return new Solution(bestGenotype, minimalDistance);
     }

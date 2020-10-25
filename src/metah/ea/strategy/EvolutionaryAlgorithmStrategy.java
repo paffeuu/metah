@@ -7,6 +7,7 @@ import metah.ea.strategy.configuration.EvolutionaryAlgorithmStrategyConfiguratio
 import metah.model.DistanceMatrix;
 import metah.model.Location;
 import metah.service.Logger;
+import metah.service.StatisticsService;
 
 import java.util.*;
 
@@ -28,7 +29,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     @Override
     public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, int capacity,
                                         DistanceMatrix distanceMatrix) {
-
+        StatisticsService statistics = new StatisticsService(conf.getPopulationSize() * conf.getGenerations() * repetitions);
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         for (int j = 0; j < repetitions; j++) {
@@ -38,13 +39,13 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 population = crossover(population, conf);
                 population = mutation(population, conf);
                 EvaluationResults evaluationResults = evaluation(population, capacity, distanceMatrix, locations, depotNr,
-                        minimalDistance, bestGenotype, i);
+                        minimalDistance, bestGenotype, i, statistics);
                 bestGenotype = evaluationResults.getBestGenotype();
                 minimalDistance = evaluationResults.getMinimalDistance();
-
             }
         }
         logBestGenotype(bestGenotype, minimalDistance);
+        getLogger().logStatistics(statistics);
         getLogger().writeToFile();
         return new Solution(bestGenotype, minimalDistance);
     }
@@ -306,7 +307,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
 
     private EvaluationResults evaluation(List<Genotype> population, int capacity, DistanceMatrix distanceMatrix,
                                          Map<Integer, Location> locations, int depotNr, double minimalDistance,
-                                         Genotype bestGenotype, int genNumber
+                                         Genotype bestGenotype, int genNumber, StatisticsService statistics
                                          ) {
         double bestInPop = Double.MAX_VALUE;
         double worstInPop = Double.MIN_VALUE;
@@ -314,6 +315,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         Genotype bestGenotypeInPop = null;
         for (Genotype genotype : population) {
             double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
+            statistics.addResult((int)distance);
             if (distance < bestInPop) {
                 bestInPop = distance;
                 bestGenotypeInPop = genotype;

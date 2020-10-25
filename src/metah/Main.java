@@ -17,8 +17,21 @@ import metah.service.DataLoader;
 
 public class Main {
     public static void main(String[] args) {
-//        String instanceName = "toy";
-        String instanceName = "A-n32-k5";
+        String instanceName;
+//        instanceName = "toy";
+        String[] instances = new String[] {
+                "A-n32-k5",
+                "A-n37-k6",
+                "A-n39-k5",
+                "A-n45-k6",
+                "A-n48-k7"
+        };
+        instanceName = "A-n32-k5";
+//        instanceName = "A-n37-k6";
+//        instanceName = "A-n39-k5";
+//        instanceName = "A-n45-k6";
+//        instanceName = "A-n48-k7";
+
 
         DataLoader dataLoader = new DataLoader();
         DataSet dataSet = dataLoader.loadDataSetFromFile(instanceName);
@@ -30,246 +43,194 @@ public class Main {
 //        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
 //                distanceMatrix, instanceName);
 //        System.out.println(CVRPSolver.getLastResultDescription());
+
+//        CVRPSolver = new CVRPSolver(new GreedyStrategy());
+//        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+//                distanceMatrix, instanceName);
+//        System.out.println(CVRPSolver.getLastResultDescription());
+
+//        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+//                SelectionType.ROULETTE, CrossoverType.PMX, MutationType.INVERSION, 1000,
+//                1000, 0.7, 0.1, 1
+//        )));
+//        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+//        instanceName);
+//        System.out.println(CVRPSolver.getLastResultDescription());
+
+//        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+//                SelectionType.TOURNAMENT , CrossoverType.PMX, MutationType.INVERSION, 1000, 5,
+//                1000, 0.7, 0.1, 10
+//        )));
+//        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+//        instanceName);
+//        System.out.println(CVRPSolver.getLastResultDescription());
+
+
 ////
 ////
 //        CVRPSolver = new CVRPSolver(new GreedyStrategy());
 //        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
 //                distanceMatrix, instanceName);
 //        System.out.println(CVRPSolver.getLastResultDescription());
+//
+        for (int i = 0; i < instances.length; i++) {
+            instanceName = instances[i];
+            dataLoader = new DataLoader();
+            dataSet = dataLoader.loadDataSetFromFile(instanceName);
+            distanceMatrix = new DistanceMatrix(dataSet.getLocations());
 
-        //TOURNAMENT OR ROULETTE
+            //TOURNAMENT OR ROULETTE
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.ROULETTE, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.ROULETTE, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                3, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    3, 1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                7, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    7, 1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                10, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-
-
-        // POPULATION SIZE
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 100,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 500,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 2000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 5000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    10, 1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
 
-        // GENERATIONS
+            // MUTATION
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 100, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.7, 0.05, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 500, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.7, 0.2, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 2000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.SWAP, 1000,
+                    5, 1000, 0.7, 0.005, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 5000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.SWAP, 1000,
+                    5, 1000, 0.7, 0.01, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-
-        // MUTATION
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.05, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.2, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.SWAP, 1000,
-                5, 1000, 0.7, 0.05, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.SWAP, 1000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
-
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.SWAP, 1000,
-                5, 1000, 0.7, 0.2, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.SWAP, 1000,
+                    5, 1000, 0.7, 0.02, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
 
 
-        // CROSSOVER
+            // CROSSOVER
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.5, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.5, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
-                5, 1000, 0.9, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.9, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.OX, MutationType.INVERSION, 1000,
-                5, 1000, 0.5, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.OX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.5, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.OX, MutationType.INVERSION, 1000,
-                5, 1000, 0.7, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.OX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.7, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                SelectionType.TOURNAMENT, CrossoverType.OX, MutationType.INVERSION, 1000,
-                5, 1000, 0.9, 0.1, 10
-        )));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
-                instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+            CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                    SelectionType.TOURNAMENT, CrossoverType.OX, MutationType.INVERSION, 1000,
+                    5, 1000, 0.9, 0.1, 10
+            )));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(), distanceMatrix,
+                    instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+        }
 
 
+
+
+//
+//
 
 
 
