@@ -40,8 +40,10 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 population = mutation(population, conf);
                 EvaluationResults evaluationResults = evaluation(population, capacity, distanceMatrix, locations, depotNr,
                         minimalDistance, bestGenotype, i, statistics);
-                bestGenotype = evaluationResults.getBestGenotype();
-                minimalDistance = evaluationResults.getMinimalDistance();
+                if (evaluationResults.getMinimalDistance() < minimalDistance) {
+                    bestGenotype = evaluationResults.getBestGenotype();
+                    minimalDistance = evaluationResults.getMinimalDistance();
+                }
             }
         }
         logBestGenotype(bestGenotype, minimalDistance);
@@ -326,15 +328,11 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
             sumInPop += distance;
         }
         double avgOfPop = sumInPop / conf.getPopulationSize();
-        logResult(genNumber, bestInPop, worstInPop, avgOfPop);
+        logBestWorstAvgResult(genNumber, bestInPop, worstInPop, avgOfPop);
         if (bestInPop < minimalDistance) {
             minimalDistance = bestInPop;
             bestGenotype = bestGenotypeInPop;
         }
-//        if (i+1 == conf.getGenerations()) {
-//            System.out.println(bestInPop);
-//            results.add(bestInPop);
-//        }
         return new EvaluationResults(minimalDistance, bestGenotype);
     }
 
@@ -370,23 +368,5 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return sb.toString();
     }
 
-
-
-    private void logResult(int i, double best, double worst, double avg) {
-        String bestStr = String.format("%.0f", best);
-        StringBuilder sb = new StringBuilder();
-        sb.append(i+1);
-        sb.append(",");
-        sb.append(bestStr);
-        sb.append(",");
-        sb.append(String.format("%.0f", worst));
-        sb.append(",");
-        sb.append(String.format("%.0f", avg));
-        sb.append("\n");
-        String logStr = sb.toString();
-
-        Logger logger = getLogger();
-        logger.log(logStr);
-    }
 
 }

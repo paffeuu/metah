@@ -42,4 +42,21 @@ public abstract class Strategy {
     protected void logBestGenotype(Genotype bestGenotype, double minimalDistance) {
         getLogger().log(bestGenotype + " - " + (int) minimalDistance + "\n");
     }
+
+    protected void logBestWorstAvgResult(int i, double best, double worst, double avg) {
+        String bestStr = String.format("%.0f", best);
+        StringBuilder sb = new StringBuilder();
+        sb.append(i+1);
+        sb.append(",");
+        sb.append(bestStr);
+        sb.append(",");
+        sb.append(String.format("%.0f", worst));
+        sb.append(",");
+        sb.append(String.format("%.0f", avg));
+        sb.append("\n");
+        String logStr = sb.toString();
+
+        Logger logger = getLogger();
+        logger.log(logStr);
+    }
 }

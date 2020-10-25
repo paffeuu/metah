@@ -17,7 +17,7 @@ public class RandomGenotypeGenerator {
             }
         }
         Collections.shuffle(genotypeVector);
-        for (int i = places.size() + 1; i < (places.size() - 1) * 2; i++) {
+        for (int i = places.size() + 1; i < places.size() * 2; i++) {
             genotypeVector.add(i);
         }
 

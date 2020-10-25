@@ -1,7 +1,9 @@
 package metah.ea.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Genotype {
     private final List<Integer> vector;
@@ -35,6 +37,25 @@ public class Genotype {
 
     public void setNormalizedVector(List<Integer> normalizedVector) {
         this.normalizedVector = normalizedVector;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Genotype genotype = (Genotype) o;
+        return Arrays.equals(vector.toArray(), genotype.vector.toArray()) ||
+                (normalizedVector == null || genotype.normalizedVector == null) ? false :
+                Arrays.equals(normalizedVector.toArray(), genotype.normalizedVector.toArray());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vector);
     }
 
     @Override
