@@ -30,12 +30,234 @@ public class Main {
 //
         CVRPSolver CVRPSolver;
 
-        CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
-                2000, 30, NeighborhoodType.SWAP, 50 ,
-                InitializationType.RANDOM, 10)));
-        CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
-                distanceMatrix, instanceName);
-        System.out.println(CVRPSolver.getLastResultDescription());
+
+        for (int i = 0; i < instances.length; i++) {
+            instanceName = instances[i];
+
+            // swap
+
+            // iterations
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    2000, 10, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    5000, 10, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    10000, 10, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            // nsize / tabu list size
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 20, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 50, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 100, NeighborhoodType.SWAP, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.SWAP, 50 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 20, NeighborhoodType.SWAP, 50 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 50, NeighborhoodType.SWAP, 50 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 100, NeighborhoodType.SWAP, 200 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.SWAP, 20 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 200, NeighborhoodType.SWAP, 400 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+
+            // inverse
+
+            // iterations
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    2000, 10, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    5000, 10, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    10000, 10, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            // nsize / tabu list size
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 20, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 50, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 100, NeighborhoodType.INVERSE, 100 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.INVERSE, 50 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 20, NeighborhoodType.INVERSE, 50 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 50, NeighborhoodType.INVERSE, 50 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 100, NeighborhoodType.INVERSE, 200 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 10, NeighborhoodType.INVERSE, 20 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                    1000, 200, NeighborhoodType.INVERSE, 400 ,
+                    InitializationType.RANDOM, 10)));
+            CVRPSolver.findOptimalSolution(dataSet.getLocations(), dataSet.getDepotNr(), dataSet.getCapacity(),
+                    distanceMatrix, instanceName);
+            System.out.println(CVRPSolver.getLastResultDescription());
+
+
+
+
+
+
+        }
+
 
 
 
