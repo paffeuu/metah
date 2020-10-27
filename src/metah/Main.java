@@ -1,6 +1,8 @@
 package metah;
 
 import metah.ea.CVRPSolver;
+import metah.ea.Evaluator;
+import metah.ea.model.Genotype;
 import metah.model.DataSet;
 import metah.model.DistanceMatrix;
 import metah.service.DataLoader;
@@ -8,6 +10,10 @@ import metah.ts.strategy.TabuSearchStrategy;
 import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
 import metah.ts.strategy.model.InitializationType;
 import metah.ts.strategy.model.NeighborhoodType;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,6 +39,9 @@ public class Main {
 
         for (int i = 0; i < instances.length; i++) {
             instanceName = instances[i];
+
+            dataSet = dataLoader.loadDataSetFromFile(instanceName);
+            distanceMatrix = new DistanceMatrix(dataSet.getLocations());
 
             // swap
 

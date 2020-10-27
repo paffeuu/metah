@@ -183,6 +183,12 @@ public class TabuSearchStrategy extends Strategy {
         sb.append("TS");
         sb.append("_i-");
         sb.append(conf.getIterations());
+        sb.append("_ntype-");
+        if (conf.getNeighborhoodType() == NeighborhoodType.SWAP) {
+            sb.append("SWAP");
+        } else {
+            sb.append("INV");
+        }
         sb.append("_nsize-");
         sb.append(conf.getNeighborhoodSize());
         sb.append("_tabu-");
