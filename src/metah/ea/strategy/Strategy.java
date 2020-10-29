@@ -2,30 +2,25 @@ package metah.ea.strategy;
 
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
+import metah.model.DataSet;
 import metah.model.DistanceMatrix;
-import metah.model.Location;
 import metah.service.Logger;
-
-import java.util.Map;
 
 public abstract class Strategy {
     private final String name;
     protected final int repetitions;
+    protected DataSet dataSet;
+    protected DistanceMatrix distanceMatrix;
 
-    protected Strategy(String name, int repetitions) {
+    protected Strategy(String name, int repetitions, DataSet dataSet, DistanceMatrix distanceMatrix) {
         this.name = name;
         this.repetitions = repetitions;
+        this.dataSet = dataSet;
+        this.distanceMatrix = distanceMatrix;
         getLogger();
     }
 
-    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
-                                                 DistanceMatrix distanceMatrix, String instanceName) {
-        getLogger().setInstanceName(instanceName);
-        return findOptimalSolution(places, depotNr, capacity, distanceMatrix);
-    }
-
-    public abstract Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
-                                        DistanceMatrix distanceMatrix);
+    public abstract Solution findOptimalSolution();
 
     public String getName() {
         return name;

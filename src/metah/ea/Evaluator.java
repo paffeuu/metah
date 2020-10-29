@@ -1,6 +1,7 @@
 package metah.ea;
 
 import metah.ea.model.Genotype;
+import metah.model.DataSet;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
 import metah.model.Shop;
@@ -8,48 +9,54 @@ import metah.service.DistanceCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Evaluator {
+    private DataSet dataSet;
+    private DistanceMatrix distanceMatrix;
 
-    public double evaluateGenotype(Genotype genotype, int initialCapacity, DistanceMatrix distanceMatrix,
-                                   Map<Integer, Location> locations, int depotNr) {
-        Genotype normalizedGenotype = normalizeGenotype(genotype, initialCapacity, distanceMatrix, locations, depotNr);
+    public Evaluator(DataSet dataSet, DistanceMatrix distanceMatrix) {
+        this.dataSet = dataSet;
+        this.distanceMatrix = distanceMatrix;
+    }
+
+    public double evaluateGenotype(Genotype genotype) {
+        Genotype normalizedGenotype = normalizeGenotype(genotype);
         DistanceCalculator calculator = new DistanceCalculator();
         double distance = calculator.sumDistance(normalizedGenotype, distanceMatrix);
         return distance;
     }
 
-    public Genotype normalizeGenotype(Genotype genotype, int initialCapacity, DistanceMatrix distanceMatrix,
-                                      Map<Integer, Location> locations, int depotNr) {
+    public Genotype normalizeGenotype(Genotype genotype) {
         List<Integer> normalizedGenotypeList = new ArrayList<>();
-        normalizedGenotypeList.add(depotNr);
-        int currCapacity = initialCapacity;
+        normalizedGenotypeList.add(dataSet.getDepotNr());
+        int currCapacity = dataSet.getCapacity();
         for (int i = 0; i < genotype.size(); i++) {
             Location location;
-            if (genotype.get(i) > locations.size()) {
-                location = locations.get(depotNr);
+            if (genotype.get(i) > dataSet.getLocations().size()) {
+                location = dataSet.getLocations().get(dataSet.getDepotNr());
             } else {
-                location = locations.get(genotype.get(i));
+                location = dataSet.getLocations().get(genotype.get(i));
             }
             if (location.isShop()) {
                 Shop shop = (Shop) location;
                 currCapacity -= shop.getDemand();
                 if (currCapacity < 0) {
-                    currCapacity = initialCapacity - shop.getDemand();
-                    normalizedGenotypeList.add(depotNr);
+                    currCapacity = dataSet.getCapacity() - shop.getDemand();
+                    normalizedGenotypeList.add(dataSet.getDepotNr());
                 }
                 normalizedGenotypeList.add(shop.getNumber());
 
             } else {
-                if (i != 0 && genotype.get(i - 1) != depotNr && genotype.get(i - 1) <= locations.size()) {
-                    currCapacity = initialCapacity;
-                    normalizedGenotypeList.add(depotNr);
+                if (i != 0 && genotype.get(i - 1) != dataSet.getDepotNr()
+                        && genotype.get(i - 1) <= dataSet.getLocations().size()) {
+                    currCapacity = dataSet.getCapacity();
+                    normalizedGenotypeList.add(dataSet.getDepotNr());
                 }
             }
         }
-        if (genotype.get(genotype.size() - 1) != depotNr && genotype.get(genotype.size() - 1) <= locations.size()) {
-            normalizedGenotypeList.add(depotNr);
+        if (genotype.get(genotype.size() - 1) != dataSet.getDepotNr()
+                && genotype.get(genotype.size() - 1) <= dataSet.getLocations().size()) {
+            normalizedGenotypeList.add(dataSet.getDepotNr());
         }
         genotype.setNormalizedVector(normalizedGenotypeList);
         return new Genotype(normalizedGenotypeList);

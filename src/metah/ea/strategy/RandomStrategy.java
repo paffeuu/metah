@@ -5,6 +5,7 @@ import metah.ea.RandomGenotypeGenerator;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
 import metah.ea.strategy.configuration.RandomStrategyConfiguration;
+import metah.model.DataSet;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
 import metah.service.StatisticsService;
@@ -16,16 +17,15 @@ import java.util.Map;
 public class RandomStrategy extends Strategy {
     private RandomStrategyConfiguration conf;
 
-    public RandomStrategy(RandomStrategyConfiguration conf) {
+    public RandomStrategy(RandomStrategyConfiguration conf, DataSet dataSet, DistanceMatrix distanceMatrix) {
         super("Rand_attmpts-" + conf.getAttempts() + "_rep-" + conf.getRepetitions(),
-                conf.getRepetitions());
+                conf.getRepetitions(), dataSet, distanceMatrix);
         this.conf = conf;
     }
 
-    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
-                                        DistanceMatrix distanceMatrix) {
-        RandomGenotypeGenerator randomGenotypeGenerator = new RandomGenotypeGenerator();
-        Evaluator evaluator = new Evaluator();
+    public Solution findOptimalSolution() {
+        RandomGenotypeGenerator randomGenotypeGenerator = new RandomGenotypeGenerator(dataSet, distanceMatrix);
+        Evaluator evaluator = new Evaluator(dataSet, distanceMatrix);
         StatisticsService statistics = new StatisticsService(conf.getRepetitions() * conf.getAttempts());
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
@@ -33,8 +33,8 @@ public class RandomStrategy extends Strategy {
         for (int i = 0; i < repetitions; i++) {
             double bestInRep = Double.MAX_VALUE;
             for (int j = 0; j < conf.getAttempts(); j++) {
-                Genotype genotype = randomGenotypeGenerator.generate(places, depotNr);
-                double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, places, depotNr);
+                Genotype genotype = randomGenotypeGenerator.generate();
+                double distance = evaluator.evaluateGenotype(genotype);
                 statistics.addResult((int) distance);
                 if (distance < minimalDistance) {
                     minimalDistance = distance;

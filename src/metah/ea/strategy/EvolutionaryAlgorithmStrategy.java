@@ -4,9 +4,8 @@ import metah.ea.Evaluator;
 import metah.ea.RandomGenotypeGenerator;
 import metah.ea.model.*;
 import metah.ea.strategy.configuration.EvolutionaryAlgorithmStrategyConfiguration;
+import metah.model.DataSet;
 import metah.model.DistanceMatrix;
-import metah.model.Location;
-import metah.service.Logger;
 import metah.service.StatisticsService;
 
 import java.util.*;
@@ -18,28 +17,28 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
     private Evaluator evaluator;
     private EvolutionaryAlgorithmStrategyConfiguration conf;
 
-    public EvolutionaryAlgorithmStrategy(EvolutionaryAlgorithmStrategyConfiguration conf) {
-        super(EvolutionaryAlgorithmStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions());
-        this.genotypeGenerator = new RandomGenotypeGenerator();
+    public EvolutionaryAlgorithmStrategy(EvolutionaryAlgorithmStrategyConfiguration conf, DataSet dataSet,
+                                         DistanceMatrix distanceMatrix) {
+        super(EvolutionaryAlgorithmStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions(),
+                dataSet, distanceMatrix);
+        this.genotypeGenerator = new RandomGenotypeGenerator(dataSet, distanceMatrix);
         this.random = new Random();
-        this.evaluator = new Evaluator();
+        this.evaluator = new Evaluator(dataSet, distanceMatrix);
         this.conf = conf;
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, int capacity,
-                                        DistanceMatrix distanceMatrix) {
+    public Solution findOptimalSolution() {
         StatisticsService statistics = new StatisticsService(conf.getPopulationSize() * conf.getGenerations() * repetitions);
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         for (int j = 0; j < repetitions; j++) {
-            List<Genotype> population = initializePopulationRandomly(locations, depotNr);
+            List<Genotype> population = initializePopulationRandomly();
             for (int i = 0; i < conf.getGenerations(); i++) {
-                population = selection(population, conf, locations, depotNr, capacity, distanceMatrix);
+                population = selection(population, conf);
                 population = crossover(population, conf);
                 population = mutation(population, conf);
-                EvaluationResults evaluationResults = evaluation(population, capacity, distanceMatrix, locations, depotNr,
-                        minimalDistance, bestGenotype, i, statistics);
+                EvaluationResults evaluationResults = evaluation(population, minimalDistance, bestGenotype, i, statistics);
                 if (evaluationResults.getMinimalDistance() < minimalDistance) {
                     bestGenotype = evaluationResults.getBestGenotype();
                     minimalDistance = evaluationResults.getMinimalDistance();
@@ -52,27 +51,23 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return new Solution(bestGenotype, minimalDistance);
     }
 
-    private List<Genotype> initializePopulationRandomly(Map<Integer, Location> locations, int depotNr) {
+    private List<Genotype> initializePopulationRandomly() {
         List<Genotype> population = new ArrayList<>(conf.getPopulationSize());
         for (int i = 0; i < conf.getPopulationSize(); i++) {
-            population.add(genotypeGenerator.generate(locations, depotNr));
+            population.add(genotypeGenerator.generate());
         }
         return population;
     }
 
-    private List<Genotype> selection(List<Genotype> population, EvolutionaryAlgorithmStrategyConfiguration conf,
-                                     Map<Integer, Location> locations, int depotNr, int capacity,
-                                     DistanceMatrix distanceMatrix) {
+    private List<Genotype> selection(List<Genotype> population, EvolutionaryAlgorithmStrategyConfiguration conf) {
         if (conf.getSelectionType() == SelectionType.TOURNAMENT) {
-            return selectionByTournament(population, conf.getTournamentSize(), locations, depotNr, capacity, distanceMatrix);
+            return selectionByTournament(population, conf.getTournamentSize());
         } else {
-            return selectionByRoulette(population, locations, depotNr, capacity, distanceMatrix);
+            return selectionByRoulette(population);
         }
     }
 
-    private List<Genotype> selectionByTournament(List<Genotype> population, int tournamentSize,
-                                                 Map<Integer, Location> locations, int depotNr, int capacity,
-                                                 DistanceMatrix distanceMatrix) {
+    private List<Genotype> selectionByTournament(List<Genotype> population, int tournamentSize) {
         List<Genotype> selectedPopulation = new ArrayList<>(population.size());
         while (selectedPopulation.size() != population.size()) {
             List<Genotype> tournament = new ArrayList<>(tournamentSize);
@@ -81,11 +76,10 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
                 Genotype randomGenotype = population.remove(randomIndex);
                 tournament.add(randomGenotype);
             }
-//            DistanceCalculator distanceCalculator = new DistanceCalculator();
             Genotype bestGenotype = null;
             double minimalDistance = Double.MAX_VALUE;
             for (Genotype genotype : tournament) {
-                double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
+                double distance = evaluator.evaluateGenotype(genotype);
                 if (distance < minimalDistance) {
                     minimalDistance = distance;
                     bestGenotype = genotype;
@@ -97,13 +91,11 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return selectedPopulation;
     }
 
-    private List<Genotype> selectionByRoulette(List<Genotype> population, Map<Integer, Location> locations,
-                                               int depotNr, int capacity, DistanceMatrix distanceMatrix) {
+    private List<Genotype> selectionByRoulette(List<Genotype> population) {
         Map<Genotype, Double> distanceMap = new HashMap<>();
-//        DistanceCalculator distanceCalculator = new DistanceCalculator();
         double sum = 0;
         for (Genotype genotype : population) {
-            double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
+            double distance = evaluator.evaluateGenotype(genotype);
             distanceMap.put(genotype, distance);
             sum += distance;
         }
@@ -307,8 +299,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         return mutatedPopulation;
     }
 
-    private EvaluationResults evaluation(List<Genotype> population, int capacity, DistanceMatrix distanceMatrix,
-                                         Map<Integer, Location> locations, int depotNr, double minimalDistance,
+    private EvaluationResults evaluation(List<Genotype> population, double minimalDistance,
                                          Genotype bestGenotype, int genNumber, StatisticsService statistics
                                          ) {
         double bestInPop = Double.MAX_VALUE;
@@ -316,7 +307,7 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         double sumInPop = 0;
         Genotype bestGenotypeInPop = null;
         for (Genotype genotype : population) {
-            double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
+            double distance = evaluator.evaluateGenotype(genotype);
             statistics.addResult((int)distance);
             if (distance < bestInPop) {
                 bestInPop = distance;
@@ -335,7 +326,6 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         }
         return new EvaluationResults(minimalDistance, bestGenotype);
     }
-
 
 
     private static String resolveNameFromConfiguration(EvolutionaryAlgorithmStrategyConfiguration conf) {

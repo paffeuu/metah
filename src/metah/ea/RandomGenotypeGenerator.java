@@ -1,23 +1,30 @@
 package metah.ea;
 
 import metah.ea.model.Genotype;
-import metah.model.Location;
+import metah.model.DataSet;
+import metah.model.DistanceMatrix;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
 
 public class RandomGenotypeGenerator {
+    private DataSet dataSet;
+    private DistanceMatrix distanceMatrix;
 
-    public Genotype generate(Map<Integer, Location> places, int depotNr) {
-        ArrayList<Integer> genotypeVector = new ArrayList<>((places.size() - 1) * 2);
-        for (int i = 1; i < places.size() + 1; i++) {
-            if (i != depotNr) {
+    public RandomGenotypeGenerator(DataSet dataSet, DistanceMatrix distanceMatrix) {
+        this.dataSet = dataSet;
+        this.distanceMatrix = distanceMatrix;
+    }
+
+    public Genotype generate() {
+        ArrayList<Integer> genotypeVector = new ArrayList<>((dataSet.getLocations().size() - 1) * 2);
+        for (int i = 1; i < dataSet.getLocations().size() + 1; i++) {
+            if (i != dataSet.getDepotNr()) {
                 genotypeVector.add(i);
             }
         }
         Collections.shuffle(genotypeVector);
-        for (int i = places.size() + 1; i < places.size() * 2; i++) {
+        for (int i = dataSet.getLocations().size() + 1; i < dataSet.getLocations().size() * 2; i++) {
             genotypeVector.add(i);
         }
 

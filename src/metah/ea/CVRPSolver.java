@@ -2,13 +2,9 @@ package metah.ea;
 
 import metah.ea.model.Solution;
 import metah.ea.strategy.Strategy;
-import metah.model.DistanceMatrix;
-import metah.model.Location;
-
-import java.util.Map;
 
 public class CVRPSolver {
-    private Strategy strategy;
+    private final Strategy strategy;
     private String lastResultDescription;
 
     public CVRPSolver(Strategy strategy) {
@@ -16,11 +12,9 @@ public class CVRPSolver {
         this.lastResultDescription = "No solution found yet.";
     }
 
-    public Solution findOptimalSolution(Map<Integer, Location> places, int depotNr, int capacity,
-                                        DistanceMatrix distanceMatrix, String instanceName) {
-        Solution optimalSolution = strategy.findOptimalSolution(places, depotNr, capacity, distanceMatrix,
-                instanceName);
-        setLastResultDescription(optimalSolution);
+    public Solution findOptimalSolution() {
+        Solution optimalSolution = strategy.findOptimalSolution();
+        setLastResultDescription(optimalSolution, strategy.getName());
         return optimalSolution;
     }
 
@@ -28,10 +22,10 @@ public class CVRPSolver {
         return lastResultDescription;
     }
 
-    private void setLastResultDescription(Solution optimalSolution) {
+    private void setLastResultDescription(Solution optimalSolution, String strategyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("Using strategy: ");
-        sb.append(strategy.getName());
+        sb.append(strategyName);
         sb.append("\nBest found solution:\n");
         sb.append(optimalSolution);
         lastResultDescription = sb.toString();

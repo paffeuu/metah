@@ -8,15 +8,18 @@ import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
 import metah.ea.strategy.GreedyStrategy;
 import metah.ea.strategy.Strategy;
+import metah.model.DataSet;
 import metah.model.DistanceMatrix;
-import metah.model.Location;
 import metah.service.Logger;
 import metah.service.StatisticsService;
 import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
 import metah.ts.strategy.model.InitializationType;
 import metah.ts.strategy.model.NeighborhoodType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class TabuSearchStrategy extends Strategy {
     private RandomGenotypeGenerator genotypeGenerator;
@@ -25,17 +28,16 @@ public class TabuSearchStrategy extends Strategy {
     private TabuSearchStrategyConfiguration conf;
 
 
-    public TabuSearchStrategy(TabuSearchStrategyConfiguration conf) {
-        super(TabuSearchStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions());
-        this.genotypeGenerator = new RandomGenotypeGenerator();
+    public TabuSearchStrategy(TabuSearchStrategyConfiguration conf, DataSet dataSet, DistanceMatrix distanceMatrix) {
+        super(TabuSearchStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions(), dataSet, distanceMatrix);
+        this.genotypeGenerator = new RandomGenotypeGenerator(dataSet, distanceMatrix);
         this.random = new Random();
-        this.evaluator = new Evaluator();
+        this.evaluator = new Evaluator(dataSet, distanceMatrix);
         this.conf = conf;
     }
 
     @Override
-    public Solution findOptimalSolution(Map<Integer, Location> locations, int depotNr, int capacity,
-                                        DistanceMatrix distanceMatrix) {
+    public Solution findOptimalSolution() {
         StatisticsService statistics = new StatisticsService(conf.getIterations() * conf.getNeighborhoodSize() * repetitions);
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
@@ -45,18 +47,17 @@ public class TabuSearchStrategy extends Strategy {
             double bestInRep = Double.MAX_VALUE;
             List<Genotype> tabuList = new ArrayList<>(conf.getTabuListSize());
             if (conf.getInitializationType() == InitializationType.RANDOM) {
-                currGenotype = initializeGenotypeRandomly(locations, depotNr);
+                currGenotype = initializeGenotypeRandomly();
             } else {
-                currGenotype = initializeGenotypeGreedy(locations, depotNr, capacity, distanceMatrix);
+                currGenotype = initializeGenotypeGreedy();
             }
             for (int i = 0; i < conf.getIterations(); i++) {
                 if (i * 10 % conf.getIterations() == 0) {
                     System.out.println(i);
                 }
                 List<Genotype> neighborhood = neighborhood(currGenotype, conf.getNeighborhoodSize(),
-                        conf.getNeighborhoodType(), tabuList, capacity, distanceMatrix, locations, depotNr);
-                EvaluationResults evaluationResults = evaluation(neighborhood, capacity, distanceMatrix, locations,
-                        depotNr, bestInRep, bestGenotype, i, statistics);
+                        conf.getNeighborhoodType(), tabuList);
+                EvaluationResults evaluationResults = evaluation(neighborhood, bestInRep, i, statistics);
                 if (evaluationResults.getMinimalDistance() < minimalDistance) {
                     bestGenotype = evaluationResults.getBestGenotype();
                     minimalDistance = evaluationResults.getMinimalDistance();
@@ -85,22 +86,18 @@ public class TabuSearchStrategy extends Strategy {
         return new Solution(bestGenotype, minimalDistance);
     }
 
-    private Genotype initializeGenotypeRandomly(Map<Integer, Location> locations, int depotNr) {
-        return genotypeGenerator.generate(locations, depotNr);
+    private Genotype initializeGenotypeRandomly() {
+        return genotypeGenerator.generate();
     }
 
-    private Genotype initializeGenotypeGreedy(Map<Integer, Location> locations, int depotNr, int capacity,
-                                              DistanceMatrix distanceMatrix) {
-        CVRPSolver greedySolver = new CVRPSolver(new GreedyStrategy());
-        Solution greedySolution =
-                greedySolver.findOptimalSolution(locations, depotNr, capacity, distanceMatrix, null);
+    private Genotype initializeGenotypeGreedy() {
+        CVRPSolver greedySolver = new CVRPSolver(new GreedyStrategy(dataSet, distanceMatrix));
+        Solution greedySolution = greedySolver.findOptimalSolution();
         return greedySolution.getBestGenotype();
     }
 
     private List<Genotype> neighborhood(Genotype currGenotype, int neighborhoodSize,
-                                        NeighborhoodType neighborhoodType, List<Genotype> tabuList,
-                                        int capacity, DistanceMatrix distanceMatrix,
-                                        Map<Integer, Location> locations, int depotNr) {
+                                        NeighborhoodType neighborhoodType, List<Genotype> tabuList) {
         List<Genotype> neighborhood = new ArrayList<>(neighborhoodSize);
         for (int i = 0; i < neighborhoodSize; i++) {
             Genotype neighbor;
@@ -109,7 +106,7 @@ public class TabuSearchStrategy extends Strategy {
             } else {
                 neighbor = neighborhoodInverse(currGenotype);
             }
-            evaluator.normalizeGenotype(neighbor, capacity, distanceMatrix, locations, depotNr);
+            evaluator.normalizeGenotype(neighbor);
             if (tabuList.stream().noneMatch(genotype -> genotype.equals(neighbor))) {
                 neighborhood.add(neighbor);
             }
@@ -158,15 +155,13 @@ public class TabuSearchStrategy extends Strategy {
         return neighbor;
     }
 
-    private EvaluationResults evaluation(List<Genotype> neighborhood, int capacity, DistanceMatrix distanceMatrix,
-                                         Map<Integer, Location> locations, int depotNr, double minimalDistance,
-                                         Genotype bestGenotype, int genNumber, StatisticsService statistics) {
+    private EvaluationResults evaluation(List<Genotype> neighborhood, double minimalDistance, int genNumber, StatisticsService statistics) {
         double bestInNeighboorhod = Double.MAX_VALUE;
         double worstInNeighborhood = Double.MIN_VALUE;
         double sumInNeighborhood = 0;
         Genotype bestGenotypeInNeighborhood = null;
         for (Genotype genotype : neighborhood) {
-            double distance = evaluator.evaluateGenotype(genotype, capacity, distanceMatrix, locations, depotNr);
+            double distance = evaluator.evaluateGenotype(genotype);
             statistics.addResult((int)distance);
             if (distance < bestInNeighboorhod) {
                 bestInNeighboorhod = distance;
