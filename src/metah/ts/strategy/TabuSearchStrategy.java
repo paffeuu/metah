@@ -10,6 +10,7 @@ import metah.ea.strategy.GreedyStrategy;
 import metah.ea.strategy.Strategy;
 import metah.model.DistanceMatrix;
 import metah.model.Location;
+import metah.service.Logger;
 import metah.service.StatisticsService;
 import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
 import metah.ts.strategy.model.InitializationType;
@@ -39,7 +40,9 @@ public class TabuSearchStrategy extends Strategy {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         for (int j = 0; j < repetitions; j++) {
+            System.out.println("rep = " + j);
             Genotype currGenotype;
+            double bestInRep = Double.MAX_VALUE;
             List<Genotype> tabuList = new ArrayList<>(conf.getTabuListSize());
             if (conf.getInitializationType() == InitializationType.RANDOM) {
                 currGenotype = initializeGenotypeRandomly(locations, depotNr);
@@ -47,13 +50,19 @@ public class TabuSearchStrategy extends Strategy {
                 currGenotype = initializeGenotypeGreedy(locations, depotNr, capacity, distanceMatrix);
             }
             for (int i = 0; i < conf.getIterations(); i++) {
+                if (i * 10 % conf.getIterations() == 0) {
+                    System.out.println(i);
+                }
                 List<Genotype> neighborhood = neighborhood(currGenotype, conf.getNeighborhoodSize(),
                         conf.getNeighborhoodType(), tabuList, capacity, distanceMatrix, locations, depotNr);
                 EvaluationResults evaluationResults = evaluation(neighborhood, capacity, distanceMatrix, locations,
-                        depotNr, minimalDistance, bestGenotype, i, statistics);
+                        depotNr, bestInRep, bestGenotype, i, statistics);
                 if (evaluationResults.getMinimalDistance() < minimalDistance) {
                     bestGenotype = evaluationResults.getBestGenotype();
                     minimalDistance = evaluationResults.getMinimalDistance();
+                }
+                if (evaluationResults.getMinimalDistance() < bestInRep) {
+                    bestInRep = evaluationResults.getMinimalDistance();
                 }
                 if (evaluationResults.getBestGenotype() != null) {
                     currGenotype = evaluationResults.getBestGenotype();
@@ -169,14 +178,46 @@ public class TabuSearchStrategy extends Strategy {
             sumInNeighborhood += distance;
         }
         double avgOfNeighborhood = sumInNeighborhood / neighborhood.size();
-        logBestWorstAvgResult(genNumber, bestInNeighboorhod, worstInNeighborhood, avgOfNeighborhood);
-//        if (bestInNeighboorhod < minimalDistance) {
-//            minimalDistance = bestInNeighboorhod;
-//            bestGenotype = bestGenotypeInNeighborhood;
-//        }
+//        logCurrentBestResult(genNumber, bestInNeighboorhod, minimalDistance);
+        logCurrBestWorstAvgResult(genNumber, bestInNeighboorhod, minimalDistance, worstInNeighborhood, avgOfNeighborhood);
         return new EvaluationResults(bestInNeighboorhod, bestGenotypeInNeighborhood);
+    }
+
+    private void logCurrentBestResult(int i, double best, double curr) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(i+1);
+        sb.append(",");
+        sb.append(String.format("%.0f", best));
+        sb.append(",");
+        sb.append(String.format("%.0f", curr));
+        sb.append("\n");
+        String logStr = sb.toString();
+
+        Logger logger = getLogger();
+        logger.log(logStr);
 
     }
+
+    private void logCurrBestWorstAvgResult(int i, double curr, double best, double worst, double avg) {
+        String bestStr = String.format("%.0f", best);
+        StringBuilder sb = new StringBuilder();
+        sb.append(i+1);
+        sb.append(",");
+        sb.append(String.format("%.0f", curr));
+        sb.append(",");
+        sb.append(bestStr);
+        sb.append(",");
+        sb.append(String.format("%.0f", worst));
+        sb.append(",");
+        sb.append(String.format("%.0f", avg));
+        sb.append("\n");
+        String logStr = sb.toString();
+
+        Logger logger = getLogger();
+        logger.log(logStr);
+    }
+
+
 
     private static String resolveNameFromConfiguration(TabuSearchStrategyConfiguration conf) {
         StringBuilder sb = new StringBuilder();
