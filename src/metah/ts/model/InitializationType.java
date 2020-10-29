@@ -1,4 +1,4 @@
-package metah.ts.strategy.model;
+package metah.ts.model;
 
 public enum InitializationType {
     RANDOM, GREEDY

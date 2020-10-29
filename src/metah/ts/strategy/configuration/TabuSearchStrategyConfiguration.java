@@ -1,7 +1,7 @@
 package metah.ts.strategy.configuration;
 
-import metah.ts.strategy.model.InitializationType;
-import metah.ts.strategy.model.NeighborhoodType;
+import metah.ts.model.InitializationType;
+import metah.ts.model.NeighborhoodType;
 
 public class TabuSearchStrategyConfiguration {
     private final int iterations;

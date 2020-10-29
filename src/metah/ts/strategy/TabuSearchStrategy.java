@@ -13,8 +13,8 @@ import metah.model.DistanceMatrix;
 import metah.service.Logger;
 import metah.service.StatisticsService;
 import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
-import metah.ts.strategy.model.InitializationType;
-import metah.ts.strategy.model.NeighborhoodType;
+import metah.ts.model.InitializationType;
+import metah.ts.model.NeighborhoodType;
 
 import java.util.ArrayList;
 import java.util.Collections;

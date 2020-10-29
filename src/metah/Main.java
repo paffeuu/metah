@@ -1,9 +1,7 @@
 package metah;
 
 import metah.ea.CVRPSolver;
-import metah.ea.Evaluator;
 import metah.ea.model.CrossoverType;
-import metah.ea.model.Genotype;
 import metah.ea.model.MutationType;
 import metah.ea.model.SelectionType;
 import metah.ea.strategy.EvolutionaryAlgorithmStrategy;
@@ -16,12 +14,8 @@ import metah.model.DistanceMatrix;
 import metah.service.DataLoader;
 import metah.ts.strategy.TabuSearchStrategy;
 import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
-import metah.ts.strategy.model.InitializationType;
-import metah.ts.strategy.model.NeighborhoodType;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import metah.ts.model.InitializationType;
+import metah.ts.model.NeighborhoodType;
 
 public class Main {
     public static void main(String[] args) {
