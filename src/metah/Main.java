@@ -1,6 +1,6 @@
 package metah;
 
-import metah.ea.CVRPSolver;
+import metah.service.CVRPSolver;
 import metah.ea.model.CrossoverType;
 import metah.ea.model.MutationType;
 import metah.ea.model.SelectionType;

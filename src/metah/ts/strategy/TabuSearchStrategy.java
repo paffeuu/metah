@@ -1,8 +1,8 @@
 package metah.ts.strategy;
 
-import metah.ea.CVRPSolver;
-import metah.ea.Evaluator;
-import metah.ea.RandomGenotypeGenerator;
+import metah.service.CVRPSolver;
+import metah.service.Evaluator;
+import metah.service.RandomGenotypeGenerator;
 import metah.ea.model.EvaluationResults;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;

@@ -1,7 +1,7 @@
 package metah.ea.strategy;
 
-import metah.ea.Evaluator;
-import metah.ea.RandomGenotypeGenerator;
+import metah.service.Evaluator;
+import metah.service.RandomGenotypeGenerator;
 import metah.ea.model.*;
 import metah.ea.strategy.configuration.EvolutionaryAlgorithmStrategyConfiguration;
 import metah.model.DataSet;

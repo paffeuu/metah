@@ -1,18 +1,16 @@
 package metah.ea.strategy;
 
-import metah.ea.Evaluator;
-import metah.ea.RandomGenotypeGenerator;
+import metah.service.Evaluator;
+import metah.service.RandomGenotypeGenerator;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
 import metah.ea.strategy.configuration.RandomStrategyConfiguration;
 import metah.model.DataSet;
 import metah.model.DistanceMatrix;
-import metah.model.Location;
 import metah.service.StatisticsService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class RandomStrategy extends Strategy {
     private RandomStrategyConfiguration conf;

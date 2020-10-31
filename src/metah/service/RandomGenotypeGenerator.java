@@ -1,4 +1,4 @@
-package metah.ea;
+package metah.service;
 
 import metah.ea.model.Genotype;
 import metah.model.DataSet;

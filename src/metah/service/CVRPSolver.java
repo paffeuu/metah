@@ -1,4 +1,4 @@
-package metah.ea;
+package metah.service;
 
 import metah.ea.model.Solution;
 import metah.ea.strategy.Strategy;

@@ -1,6 +1,6 @@
 package metah.ea.strategy;
 
-import metah.ea.Evaluator;
+import metah.service.Evaluator;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
 import metah.model.DataSet;
