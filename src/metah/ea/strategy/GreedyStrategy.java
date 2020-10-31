@@ -1,6 +1,5 @@
 package metah.ea.strategy;
 
-import metah.service.Evaluator;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
 import metah.model.DataSet;
@@ -19,7 +18,6 @@ public class GreedyStrategy extends Strategy {
 
     @Override
     public Solution findOptimalSolution() {
-        Evaluator evaluator = new Evaluator(dataSet, distanceMatrix);
         StatisticsService statistics = new StatisticsService(dataSet.getLocations().size());
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;

@@ -1,7 +1,5 @@
 package metah.ea.strategy;
 
-import metah.service.Evaluator;
-import metah.service.RandomGenotypeGenerator;
 import metah.ea.model.*;
 import metah.ea.strategy.configuration.EvolutionaryAlgorithmStrategyConfiguration;
 import metah.model.DataSet;
@@ -11,19 +9,12 @@ import metah.service.StatisticsService;
 import java.util.*;
 
 public class EvolutionaryAlgorithmStrategy extends Strategy {
-
-    private RandomGenotypeGenerator genotypeGenerator;
-    private Random random;
-    private Evaluator evaluator;
     private EvolutionaryAlgorithmStrategyConfiguration conf;
 
     public EvolutionaryAlgorithmStrategy(EvolutionaryAlgorithmStrategyConfiguration conf, DataSet dataSet,
                                          DistanceMatrix distanceMatrix) {
         super(EvolutionaryAlgorithmStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions(),
                 dataSet, distanceMatrix);
-        this.genotypeGenerator = new RandomGenotypeGenerator(dataSet, distanceMatrix);
-        this.random = new Random();
-        this.evaluator = new Evaluator(dataSet, distanceMatrix);
         this.conf = conf;
     }
 

@@ -1,8 +1,5 @@
 package metah.ts.strategy;
 
-import metah.service.CVRPSolver;
-import metah.service.Evaluator;
-import metah.service.RandomGenotypeGenerator;
 import metah.ea.model.EvaluationResults;
 import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
@@ -10,29 +7,23 @@ import metah.ea.strategy.GreedyStrategy;
 import metah.ea.strategy.Strategy;
 import metah.model.DataSet;
 import metah.model.DistanceMatrix;
+import metah.service.CVRPSolver;
 import metah.service.Logger;
 import metah.service.StatisticsService;
-import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
 import metah.ts.model.InitializationType;
 import metah.ts.model.NeighborhoodType;
+import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class TabuSearchStrategy extends Strategy {
-    private RandomGenotypeGenerator genotypeGenerator;
-    private Random random;
-    private Evaluator evaluator;
     private TabuSearchStrategyConfiguration conf;
 
 
     public TabuSearchStrategy(TabuSearchStrategyConfiguration conf, DataSet dataSet, DistanceMatrix distanceMatrix) {
         super(TabuSearchStrategy.resolveNameFromConfiguration(conf), conf.getRepetitions(), dataSet, distanceMatrix);
-        this.genotypeGenerator = new RandomGenotypeGenerator(dataSet, distanceMatrix);
-        this.random = new Random();
-        this.evaluator = new Evaluator(dataSet, distanceMatrix);
         this.conf = conf;
     }
 
