@@ -77,16 +77,6 @@ public class TabuSearchStrategy extends Strategy {
         return new Solution(bestGenotype, minimalDistance);
     }
 
-    private Genotype initializeGenotypeRandomly() {
-        return genotypeGenerator.generate();
-    }
-
-    private Genotype initializeGenotypeGreedy() {
-        CVRPSolver greedySolver = new CVRPSolver(new GreedyStrategy(dataSet, distanceMatrix));
-        Solution greedySolution = greedySolver.findOptimalSolution();
-        return greedySolution.getBestGenotype();
-    }
-
     private List<Genotype> neighborhood(Genotype currGenotype, int neighborhoodSize,
                                         NeighborhoodType neighborhoodType, List<Genotype> tabuList) {
         List<Genotype> neighborhood = new ArrayList<>(neighborhoodSize);
@@ -167,21 +157,6 @@ public class TabuSearchStrategy extends Strategy {
 //        logCurrentBestResult(genNumber, bestInNeighboorhod, minimalDistance);
         logCurrBestWorstAvgResult(genNumber, bestInNeighboorhod, minimalDistance, worstInNeighborhood, avgOfNeighborhood);
         return new EvaluationResults(bestInNeighboorhod, bestGenotypeInNeighborhood);
-    }
-
-    private void logCurrentBestResult(int i, double best, double curr) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(i+1);
-        sb.append(",");
-        sb.append(String.format("%.0f", best));
-        sb.append(",");
-        sb.append(String.format("%.0f", curr));
-        sb.append("\n");
-        String logStr = sb.toString();
-
-        Logger logger = getLogger();
-        logger.log(logStr);
-
     }
 
     private void logCurrBestWorstAvgResult(int i, double curr, double best, double worst, double avg) {

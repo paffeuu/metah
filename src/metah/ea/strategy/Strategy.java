@@ -4,6 +4,7 @@ import metah.ea.model.Genotype;
 import metah.ea.model.Solution;
 import metah.model.DataSet;
 import metah.model.DistanceMatrix;
+import metah.service.CVRPSolver;
 import metah.service.Evaluator;
 import metah.service.Logger;
 import metah.service.RandomGenotypeGenerator;
@@ -27,7 +28,7 @@ public abstract class Strategy {
         this.genotypeGenerator = new RandomGenotypeGenerator(dataSet, distanceMatrix);
         this.random = new Random();
         this.evaluator = new Evaluator(dataSet, distanceMatrix);
-        getLogger();
+        getLogger().setInstanceName(dataSet.getName());
     }
 
     public abstract Solution findOptimalSolution();
@@ -38,6 +39,16 @@ public abstract class Strategy {
 
     public int getRepetitions() {
         return repetitions;
+    }
+
+    protected Genotype initializeGenotypeRandomly() {
+        return genotypeGenerator.generate();
+    }
+
+    protected Genotype initializeGenotypeGreedy() {
+        CVRPSolver greedySolver = new CVRPSolver(new GreedyStrategy(dataSet, distanceMatrix));
+        Solution greedySolution = greedySolver.findOptimalSolution();
+        return greedySolution.getBestGenotype();
     }
 
     protected Logger getLogger() {
@@ -63,5 +74,20 @@ public abstract class Strategy {
 
         Logger logger = getLogger();
         logger.log(logStr);
+    }
+
+    protected void logCurrentBestResult(int i, double best, double curr) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(i+1);
+        sb.append(",");
+        sb.append(String.format("%.0f", best));
+        sb.append(",");
+        sb.append(String.format("%.0f", curr));
+        sb.append("\n");
+        String logStr = sb.toString();
+
+        Logger logger = getLogger();
+        logger.log(logStr);
+
     }
 }
