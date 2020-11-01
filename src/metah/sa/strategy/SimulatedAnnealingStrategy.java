@@ -28,7 +28,8 @@ public class SimulatedAnnealingStrategy extends Strategy {
     public Solution findOptimalSolution() {
         int coolingRounds = (int) (Math.log(conf.getStartTemperature() - conf.getEndTemperature())
                 / Math.log(conf.getCoolingFactor()) * (-1));
-        StatisticsService statistics = new StatisticsService((coolingRounds + 1) * conf.getIterations());
+        StatisticsService statistics = new StatisticsService((coolingRounds + 5) *
+                conf.getIterations() * repetitions);
 
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
@@ -152,6 +153,8 @@ public class SimulatedAnnealingStrategy extends Strategy {
         sb.append(conf.getStartTemperature());
         sb.append("-endT-");
         sb.append(conf.getEndTemperature());
+        sb.append("-coolF-");
+        sb.append(conf.getCoolingFactor());
         sb.append("_init-RAND");
         return sb.toString();
     }
