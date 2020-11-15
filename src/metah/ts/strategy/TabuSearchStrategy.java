@@ -48,7 +48,7 @@ public class TabuSearchStrategy extends Strategy {
                 }
                 List<Genotype> neighborhood = neighborhood(currGenotype, conf.getNeighborhoodSize(),
                         conf.getNeighborhoodType(), tabuList);
-                EvaluationResults evaluationResults = evaluation(neighborhood, bestInRep, i, statistics);
+                EvaluationResults evaluationResults = evaluation(neighborhood, bestInRep, i);
                 if (evaluationResults.getMinimalDistance() < minimalDistance) {
                     bestGenotype = evaluationResults.getBestGenotype();
                     minimalDistance = evaluationResults.getMinimalDistance();
@@ -70,6 +70,7 @@ public class TabuSearchStrategy extends Strategy {
                     }
                 }
             }
+            statistics.addResult((int)bestInRep);
         }
         logBestGenotype(bestGenotype, minimalDistance);
         getLogger().logStatistics(statistics);
@@ -136,14 +137,13 @@ public class TabuSearchStrategy extends Strategy {
         return neighbor;
     }
 
-    private EvaluationResults evaluation(List<Genotype> neighborhood, double minimalDistance, int genNumber, StatisticsService statistics) {
+    private EvaluationResults evaluation(List<Genotype> neighborhood, double minimalDistance, int genNumber) {
         double bestInNeighboorhod = Double.MAX_VALUE;
         double worstInNeighborhood = Double.MIN_VALUE;
         double sumInNeighborhood = 0;
         Genotype bestGenotypeInNeighborhood = null;
         for (Genotype genotype : neighborhood) {
             double distance = evaluator.evaluateGenotype(genotype);
-            statistics.addResult((int)distance);
             if (distance < bestInNeighboorhod) {
                 bestInNeighboorhod = distance;
                 bestGenotypeInNeighborhood = genotype;

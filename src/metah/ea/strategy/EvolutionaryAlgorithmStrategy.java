@@ -24,17 +24,19 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         for (int j = 0; j < repetitions; j++) {
+            EvaluationResults evaluationResults = null;
             List<Genotype> population = initializePopulationRandomly();
             for (int i = 0; i < conf.getGenerations(); i++) {
                 population = selection(population, conf);
                 population = crossover(population, conf);
                 population = mutation(population, conf);
-                EvaluationResults evaluationResults = evaluation(population, minimalDistance, bestGenotype, i, statistics);
+                evaluationResults = evaluation(population, minimalDistance, bestGenotype, i, statistics);
                 if (evaluationResults.getMinimalDistance() < minimalDistance) {
                     bestGenotype = evaluationResults.getBestGenotype();
                     minimalDistance = evaluationResults.getMinimalDistance();
                 }
             }
+            statistics.addResult((int)evaluationResults.getMinimalDistance());
         }
         logBestGenotype(bestGenotype, minimalDistance);
         getLogger().logStatistics(statistics);
@@ -299,7 +301,6 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         Genotype bestGenotypeInPop = null;
         for (Genotype genotype : population) {
             double distance = evaluator.evaluateGenotype(genotype);
-            statistics.addResult((int)distance);
             if (distance < bestInPop) {
                 bestInPop = distance;
                 bestGenotypeInPop = genotype;

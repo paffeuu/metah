@@ -1,12 +1,20 @@
 package metah;
 
+import metah.ea.model.CrossoverType;
+import metah.ea.model.MutationType;
+import metah.ea.model.SelectionType;
+import metah.ea.strategy.EvolutionaryAlgorithmStrategy;
+import metah.ea.strategy.configuration.EvolutionaryAlgorithmStrategyConfiguration;
 import metah.sa.strategy.SimulatedAnnealingStrategy;
 import metah.sa.strategy.configuration.SimulatedAnnealingStrategyConfiguration;
 import metah.service.CVRPSolver;
 import metah.model.DataSet;
 import metah.model.DistanceMatrix;
 import metah.service.DataLoader;
+import metah.ts.model.InitializationType;
 import metah.ts.model.NeighborhoodType;
+import metah.ts.strategy.TabuSearchStrategy;
+import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,26 +27,35 @@ public class Main {
                 "A-n45-k6",
                 "A-n48-k7"
         };
-        instanceName = instances[0];
+
+
+//        for (int i = 0; i < instances.length; i++) {
+//            instanceName = instances[i];
+            instanceName = instances[4];
 //        instanceName = "toy";
 
-        DataLoader dataLoader = new DataLoader();
-        DataSet dataSet = dataLoader.loadDataSetFromFile(instanceName);
-        DistanceMatrix distanceMatrix = new DistanceMatrix(dataSet.getLocations());
+            DataLoader dataLoader = new DataLoader();
+            DataSet dataSet = dataLoader.loadDataSetFromFile(instanceName);
+            DistanceMatrix distanceMatrix = new DistanceMatrix(dataSet.getLocations());
+
+
+            CVRPSolver CVRPSolver;
+
 
 //
-        CVRPSolver CVRPSolver;
-
-
-
-        CVRPSolver = new CVRPSolver(new SimulatedAnnealingStrategy(new SimulatedAnnealingStrategyConfiguration(
-                1, 1000, 3, NeighborhoodType.INVERSE,
-                200.0, 1.0, 0.98), dataSet, distanceMatrix));
-        CVRPSolver.findOptimalSolution();
-        System.out.println(CVRPSolver.getLastResultDescription());
+//            CVRPSolver = new CVRPSolver(new SimulatedAnnealingStrategy(new SimulatedAnnealingStrategyConfiguration(
+//                    10, 1000, 3, NeighborhoodType.INVERSE,
+//                    200.0, 1.0, 0.98), dataSet, distanceMatrix));
+//            CVRPSolver.findOptimalSolution();
+//            System.out.println(CVRPSolver.getLastResultDescription());
 //
+//        }
+
+
+//
+
 //        CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
-//                1000, 10, NeighborhoodType.SWAP, 100 ,
+//                1000, 50, NeighborhoodType.INVERSE, 100 ,
 //                InitializationType.RANDOM, 10), dataSet, distanceMatrix));
 //        CVRPSolver.findOptimalSolution();
 //        System.out.println(CVRPSolver.getLastResultDescription());
@@ -308,12 +325,12 @@ public class Main {
 //        CVRPSolver = new CVRPSolver(new GreedyStrategy(dataSet, distanceMatrix));
 //        CVRPSolver.findOptimalSolution();
 //        System.out.println(CVRPSolver.getLastResultDescription());
-//
-//        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-//                SelectionType.ROULETTE, CrossoverType.PMX, MutationType.INVERSION, 1000,
-//                1000, 0.7, 0.1, 1), dataSet, distanceMatrix));
-//        CVRPSolver.findOptimalSolution();
-//        System.out.println(CVRPSolver.getLastResultDescription());
+
+        CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                SelectionType.ROULETTE, CrossoverType.PMX, MutationType.INVERSION, 1000,
+                1000, 0.7, 0.1, 3), dataSet, distanceMatrix));
+        CVRPSolver.findOptimalSolution();
+        System.out.println(CVRPSolver.getLastResultDescription());
 
 
     }
