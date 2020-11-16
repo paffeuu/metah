@@ -63,7 +63,7 @@ public class SimulatedAnnealingStrategy extends Strategy {
                         minimalInRepDistance = currDistance;
                         bestInRepGenotype = currGenotype;
                     }
-                    logCurrentBestResult(++counter, minimalInRepDistance, currDistance);
+//                    logCurrentBestResult(++counter, minimalInRepDistance, currDistance);
 
                 }
                 if (minimalInRepDistance < minimalDistance) {

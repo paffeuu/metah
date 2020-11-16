@@ -94,8 +94,6 @@ public class Main {
             CVRPSolver = new CVRPSolver(new SimulatedAnnealingStrategy(new SimulatedAnnealingStrategyConfiguration(
                     repetitions, i, nSize, neighborhoodType,
                     startTemp, endTemp, coolingF), dataSet, distanceMatrix));
-            CVRPSolver.findOptimalSolution();
-            System.out.println(CVRPSolver.getLastResultDescription());
         }
 
         CVRPSolver.findOptimalSolution();
