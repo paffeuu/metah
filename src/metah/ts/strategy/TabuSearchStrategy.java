@@ -33,7 +33,7 @@ public class TabuSearchStrategy extends Strategy {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         for (int j = 0; j < repetitions; j++) {
-            System.out.println("rep = " + j);
+//            System.out.println("rep = " + j);
             Genotype currGenotype;
             double bestInRep = Double.MAX_VALUE;
             List<Genotype> tabuList = new ArrayList<>(conf.getTabuListSize());
@@ -43,9 +43,9 @@ public class TabuSearchStrategy extends Strategy {
                 currGenotype = initializeGenotypeGreedy();
             }
             for (int i = 0; i < conf.getIterations(); i++) {
-                if (i * 10 % conf.getIterations() == 0) {
-                    System.out.println(i);
-                }
+//                if (i * 10 % conf.getIterations() == 0) {
+//                    System.out.println(i);
+//                }
                 List<Genotype> neighborhood = neighborhood(currGenotype, conf.getNeighborhoodSize(),
                         conf.getNeighborhoodType(), tabuList);
                 EvaluationResults evaluationResults = evaluation(neighborhood, bestInRep, i);

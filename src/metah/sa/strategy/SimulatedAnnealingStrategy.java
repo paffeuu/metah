@@ -70,7 +70,7 @@ public class SimulatedAnnealingStrategy extends Strategy {
                     minimalDistance = minimalInRepDistance;
                     bestGenotype = bestInRepGenotype;
                 }
-                System.out.println(currDistance + ", " + minimalInRepDistance + ", " + String.format("%.1f", currTemp));
+//                System.out.println(currDistance + ", " + minimalInRepDistance + ", " + String.format("%.1f", currTemp));
                 currTemp *= conf.getCoolingFactor();
             }
             statistics.addResult((int)minimalInRepDistance);
