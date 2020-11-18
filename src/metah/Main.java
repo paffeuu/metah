@@ -18,11 +18,6 @@ import metah.ts.strategy.configuration.TabuSearchStrategyConfiguration;
 
 public class Main {
     public static void main(String[] args) {
-
-        int instanceNr = Integer.parseInt(args[0]);
-
-
-//        instanceName = "toy";
         String[] instances = new String[] {
                 "A-n32-k5",
                 "A-n37-k6",
@@ -32,73 +27,90 @@ public class Main {
                 "A-n54-k7",
                 "A-n60-k9"
         };
-        String instanceName = instances[instanceNr];
 
-        DataLoader dataLoader = new DataLoader();
-        DataSet dataSet = dataLoader.loadDataSetFromFile(instanceName);
-        DistanceMatrix distanceMatrix = new DistanceMatrix(dataSet.getLocations());
-        CVRPSolver CVRPSolver = null;
+        if (args.length != 0) {
+            int instanceNr = Integer.parseInt(args[0]);
 
 
+//        instanceName = "toy";
 
+            String instanceName = instances[instanceNr];
 
-
-        String strategyType = args[1];
-        if (strategyType.equals("EA")) {
-            CrossoverType crossoverType = (args[3].equals("OX")) ? CrossoverType.OX : CrossoverType.PMX;
-            MutationType mutationType = (args[4].equals("INV")) ? MutationType.INVERSION : MutationType.SWAP;
-            int popSize = Integer.parseInt(args[5]);
-            int generations = Integer.parseInt(args[6]);
-            double crossoverLikelihood = Double.parseDouble(args[7]);
-            double mutationLikelihood = Double.parseDouble(args[8]);
-            int repetitions = Integer.parseInt(args[9]);
+            DataLoader dataLoader = new DataLoader();
+            DataSet dataSet = dataLoader.loadDataSetFromFile(instanceName);
+            DistanceMatrix distanceMatrix = new DistanceMatrix(dataSet.getLocations());
+            CVRPSolver CVRPSolver = null;
 
 
 
-            SelectionType selectionType = (args[2].split("-")[0].equals("TOUR")) ? SelectionType.TOURNAMENT : SelectionType.ROULETTE;
-            if (selectionType.equals(SelectionType.TOURNAMENT)) {
-                int tourSize = Integer.parseInt(args[2].split("-")[1]);
-                CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                        SelectionType.TOURNAMENT, crossoverType, mutationType, popSize, tourSize,
-                        generations, crossoverLikelihood, mutationLikelihood, repetitions), dataSet, distanceMatrix));
 
-            } else  {
-                CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
-                        SelectionType.ROULETTE, crossoverType, mutationType, popSize,
-                        generations, crossoverLikelihood, mutationLikelihood, repetitions), dataSet, distanceMatrix));
 
+            String strategyType = args[1];
+            if (strategyType.equals("EA")) {
+                CrossoverType crossoverType = (args[3].equals("OX")) ? CrossoverType.OX : CrossoverType.PMX;
+                MutationType mutationType = (args[4].equals("INV")) ? MutationType.INVERSION : MutationType.SWAP;
+                int popSize = Integer.parseInt(args[5]);
+                int generations = Integer.parseInt(args[6]);
+                double crossoverLikelihood = Double.parseDouble(args[7]);
+                double mutationLikelihood = Double.parseDouble(args[8]);
+                int repetitions = Integer.parseInt(args[9]);
+
+
+
+                SelectionType selectionType = (args[2].split("-")[0].equals("TOUR")) ? SelectionType.TOURNAMENT : SelectionType.ROULETTE;
+                if (selectionType.equals(SelectionType.TOURNAMENT)) {
+                    int tourSize = Integer.parseInt(args[2].split("-")[1]);
+                    CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                            SelectionType.TOURNAMENT, crossoverType, mutationType, popSize, tourSize,
+                            generations, crossoverLikelihood, mutationLikelihood, repetitions), dataSet, distanceMatrix));
+
+                } else  {
+                    CVRPSolver = new CVRPSolver(new EvolutionaryAlgorithmStrategy(new EvolutionaryAlgorithmStrategyConfiguration(
+                            SelectionType.ROULETTE, crossoverType, mutationType, popSize,
+                            generations, crossoverLikelihood, mutationLikelihood, repetitions), dataSet, distanceMatrix));
+
+                }
+            } else if (strategyType.equals("TS")) {
+                int i = Integer.parseInt(args[2]);
+                int nSize = Integer.parseInt(args[3]);
+                NeighborhoodType neighborhoodType = (args[4].equals("INV")) ? NeighborhoodType.INVERSE
+                        : NeighborhoodType.SWAP;
+                int tabuListSize = Integer.parseInt(args[5]);
+                int repetitions = Integer.parseInt(args[6]);
+
+                CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
+                        i, nSize, neighborhoodType, tabuListSize ,
+                        InitializationType.RANDOM, repetitions), dataSet, distanceMatrix));
+            } else if (strategyType.equals("SA")) {
+                int repetitions = Integer.parseInt(args[2]);
+                int i = Integer.parseInt(args[3]);
+                int nSize = Integer.parseInt(args[4]);
+                NeighborhoodType neighborhoodType = (args[5].equals("INV")) ? NeighborhoodType.INVERSE
+                        : NeighborhoodType.SWAP;
+                double startTemp = Double.parseDouble(args[6]);
+                double endTemp = Double.parseDouble(args[7]);
+                double coolingF = Double.parseDouble(args[8]);
+
+
+
+                CVRPSolver = new CVRPSolver(new SimulatedAnnealingStrategy(new SimulatedAnnealingStrategyConfiguration(
+                        repetitions, i, nSize, neighborhoodType,
+                        startTemp, endTemp, coolingF), dataSet, distanceMatrix));
             }
-        } else if (strategyType.equals("TS")) {
-            int i = Integer.parseInt(args[2]);
-            int nSize = Integer.parseInt(args[3]);
-            NeighborhoodType neighborhoodType = (args[4].equals("INV")) ? NeighborhoodType.INVERSE
-                    : NeighborhoodType.SWAP;
-            int tabuListSize = Integer.parseInt(args[5]);
-            int repetitions = Integer.parseInt(args[6]);
 
-            CVRPSolver = new CVRPSolver(new TabuSearchStrategy(new TabuSearchStrategyConfiguration(
-                    i, nSize, neighborhoodType, tabuListSize ,
-                    InitializationType.RANDOM, repetitions), dataSet, distanceMatrix));
-        } else if (strategyType.equals("SA")) {
-            int repetitions = Integer.parseInt(args[2]);
-            int i = Integer.parseInt(args[3]);
-            int nSize = Integer.parseInt(args[4]);
-            NeighborhoodType neighborhoodType = (args[5].equals("INV")) ? NeighborhoodType.INVERSE
-                    : NeighborhoodType.SWAP;
-            double startTemp = Double.parseDouble(args[6]);
-            double endTemp = Double.parseDouble(args[7]);
-            double coolingF = Double.parseDouble(args[8]);
+            CVRPSolver.findOptimalSolution();
+            System.out.println(CVRPSolver.getLastResultDescription());
 
-
-
-            CVRPSolver = new CVRPSolver(new SimulatedAnnealingStrategy(new SimulatedAnnealingStrategyConfiguration(
-                    repetitions, i, nSize, neighborhoodType,
-                    startTemp, endTemp, coolingF), dataSet, distanceMatrix));
         }
 
-        CVRPSolver.findOptimalSolution();
-        System.out.println(CVRPSolver.getLastResultDescription());
-
+        System.out.println("There was no args. Conducting only hardcoded research.");
+//
+//        String instanceName = instances[0];
+////      instanceName = "toy";
+//
+//        DataLoader dataLoader = new DataLoader();
+//        DataSet dataSet = dataLoader.loadDataSetFromFile(instanceName);
+//        DistanceMatrix distanceMatrix = new DistanceMatrix(dataSet.getLocations());
 
 
 
