@@ -64,7 +64,6 @@ public class SimulatedAnnealingStrategy extends Strategy {
                         bestInRepGenotype = currGenotype;
                     }
 //                    logCurrentBestResult(++counter, minimalInRepDistance, currDistance);
-
                 }
                 if (minimalInRepDistance < minimalDistance) {
                     minimalDistance = minimalInRepDistance;
@@ -72,7 +71,9 @@ public class SimulatedAnnealingStrategy extends Strategy {
                 }
 //                System.out.println(currDistance + ", " + minimalInRepDistance + ", " + String.format("%.1f", currTemp));
                 currTemp *= conf.getCoolingFactor();
+                counter++;
             }
+            System.out.println(counter);
             statistics.addResult((int)minimalInRepDistance);
         }
         logBestGenotype(bestGenotype, minimalDistance);

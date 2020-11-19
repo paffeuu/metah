@@ -24,9 +24,13 @@ public class EvolutionaryAlgorithmStrategy extends Strategy {
         Genotype bestGenotype = null;
         double minimalDistance = Double.MAX_VALUE;
         for (int j = 0; j < repetitions; j++) {
+            System.out.println("rep: " + j);
             EvaluationResults evaluationResults = null;
             List<Genotype> population = initializePopulationRandomly();
             for (int i = 0; i < conf.getGenerations(); i++) {
+                if ( i % 100 == 0) {
+                    System.out.println("gen: " + i);
+                }
                 population = selection(population, conf);
                 population = crossover(population, conf);
                 population = mutation(population, conf);
